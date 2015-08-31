@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title></title>
+
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <link href="lib/angular-toastr/dist/angular-toastr.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+  <link href="css/ionic.app.css" rel="stylesheet">
+  -->
+
+  <!-- ionic/angularjs js -->
+  <script src="lib/ionic/js/ionic.bundle.js"></script>
+  <script src="lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
+
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
+
+</head>
+<body ng-app="GraDomo" ng-controller="viewCtrl as vm">
+
+<ion-pane>
+  <ion-header-bar align-title="left" class="bar-light">
+    <h1 class="title">GraDomo</h1>
+    <button ng-click="vm.reloadConfig()" class="button icon ion-refresh"></button>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list">
+      <div ng-repeat="(roomKey, roomConfig) in vm.config track by $index">
+        <div class="item item-divider">
+          <div class="row">
+            <div class="col-75">
+              <p class="padding">{{roomConfig.name}}</p>
+            </div>
+
+            <div class="button-bar col-25">
+              <room-button type="on" room="roomKey" config="roomConfig"></room-button>
+              <room-button type="off" room="roomKey" config="roomConfig"></room-button>
+            </div>
+          </div>
+
+          <div ng-repeat="(device, deviceConfig) in roomConfig  track by $index">
+
+            <div class="item" ng-if="vm.isDevice(deviceConfig)">
+              <div class="padding text-center">
+                <h2>{{deviceConfig.name}}</h2>
+              </div>
+
+              <div class="button-bar">
+                <light-button type="on" room="roomKey" device="device" name="deviceConfig.name"></light-button>
+                <light-button type="off" room="roomKey" device="device" name="deviceConfig.name"></light-button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-pane>
+</body>
+
+<!-- your app's js -->
+<script src="js/app.js"></script>
+<script src="js/view/view.js"></script>
+<script src="js/service/lightService.js"></script>
+<script src="js/service/piWebsocket.js"></script>
+
+<script src="js/directives/lightButton.js"></script>
+<script src="js/directives/roomButton.js"></script>
+</html>
