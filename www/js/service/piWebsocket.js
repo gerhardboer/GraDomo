@@ -49,6 +49,7 @@
         oWebsocket.onopen = function (evt) {
           socket.connecting = false;
           if (socket.requesting) {
+            socket.requesting = false;
             requestConfig();
           }
 

@@ -9,8 +9,8 @@ angular.module('GraDomo', ['ionic', 'toastr'])
       positionClass: 'toast-bottom-right'
     });
   })
-  .run(function ($ionicPlatform) {
-    $ionicPlatform.ready(function ($rootScope) {
+  .run(function ($ionicPlatform, $rootScope) {
+    $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -19,12 +19,9 @@ angular.module('GraDomo', ['ionic', 'toastr'])
       if (window.StatusBar) {
         StatusBar.styleDefault();
       }
-      $ionicPlatform.ready(function () {
-        document.addEventListener("deviceReady", function () {
-          document.addEventListener("resume", function () {
-            $rootScope.$broadcast('reloadSocket')
-          }, false);
-        });
-      });
+
+      document.addEventListener("resume", function () {
+        $rootScope.$broadcast('reloadSocket');
+      }, false);
     });
   });

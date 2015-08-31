@@ -21,6 +21,15 @@
   <!-- cordova script (this will be a 404 during development) -->
   <script src="cordova.js"></script>
 
+  <!-- your app's js -->
+  <script src="js/app.js"></script>
+  <script src="js/view/view.js"></script>
+  <script src="js/service/lightService.js"></script>
+  <script src="js/service/piWebsocket.js"></script>
+
+  <script src="js/directives/lightButton.js"></script>
+  <script src="js/directives/roomButton.js"></script>
+
 </head>
 <body ng-app="GraDomo" ng-controller="viewCtrl as vm">
 
@@ -64,13 +73,4 @@
   </ion-content>
 </ion-pane>
 </body>
-
-<!-- your app's js -->
-<script src="js/app.js"></script>
-<script src="js/view/view.js"></script>
-<script src="js/service/lightService.js"></script>
-<script src="js/service/piWebsocket.js"></script>
-
-<script src="js/directives/lightButton.js"></script>
-<script src="js/directives/roomButton.js"></script>
 </html>
