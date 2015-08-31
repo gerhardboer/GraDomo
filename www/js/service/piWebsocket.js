@@ -3,42 +3,51 @@
  */
 (function (angular) {
   angular.module('GraDomo')
-    .factory('piWebsocket', PiWebsocket);
+    .service('piWebsocket', PiWebsocket);
 
   PiWebsocket.$inject = ['$q', '$rootScope'];
 
   function PiWebsocket($q, $rootScope) {
-    var deferred,
-      oWebsocket,
+    var oWebsocket,
       socket = this,
       workerPool = {};
+
+    socket.send = send;
+    socket.requestConfig = requestConfig;
 
     initSocket();
 
     $rootScope.$on('reloadSocket', initSocket);
 
-    return {
-      send: function (message, device) {
-        var deferred = $q.defer();
-
-        oWebsocket.send(message);
-        workerPool[device] = deferred;
-        return deferred.promise;
-      },
-      requestConfig: function () {
-        deferred = $q.defer();
-
-        requestConfig();
-
-        return deferred.promise;
-      }
-    };
-
     function requestConfig() {
-      socket.requesting = true;
+      var deferred = createOrGetPromise('config');
+
+      safeSend("{\"message\":\"request config\"}");
+
+      return deferred.promise;
+    }
+
+    function send(message, device) {
+      var deferred = createOrGetPromise(device);
+
+      safeSend(message);
+
+      return deferred.promise;
+    }
+
+    function safeSend(message) {
       if (!socket.connecting) {
-        oWebsocket.send("{\"message\":\"request config\"}");
+        oWebsocket.send(message);
       }
+    }
+
+    function createOrGetPromise(name) {
+      var deferred = $q.defer();
+      if(!workerPool[name]) {
+        workerPool[name] = deferred;
+      }
+
+      return deferred
     }
 
     function initSocket() {
@@ -48,10 +57,8 @@
       if (oWebsocket) {
         oWebsocket.onopen = function (evt) {
           socket.connecting = false;
-          if (socket.requesting) {
-            socket.requesting = false;
-            requestConfig();
-          }
+
+          requestConfig();
 
           $rootScope.$broadcast('websocketOpened');
         };
@@ -62,17 +69,18 @@
           $rootScope.$broadcast('websocketError');
         };
         oWebsocket.onmessage = function (evt) {
-          socket.requesting = false;
           if (evt.data) {
             var response = angular.fromJson(evt.data);
-            if(response.config) {
-              deferred.resolve(response);
-            } else {
-              workerPool[getDevice(response)].resolve(response);
-            }
+            var key = response.config ? 'config' : getDevice(response);
+            resolve(key, response);
           }
         }
       }
+    }
+
+    function resolve(name, data) {
+      workerPool[name].resolve(data);
+      delete workerPool[name];
     }
 
     function getDevice(response) {
