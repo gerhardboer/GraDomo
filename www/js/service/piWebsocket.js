@@ -43,7 +43,7 @@
 
     function createOrGetPromise(name) {
       var deferred = $q.defer();
-      if(!workerPool[name]) {
+      if (!workerPool[name]) {
         workerPool[name] = deferred;
       }
 
@@ -79,8 +79,10 @@
     }
 
     function resolve(name, data) {
-      workerPool[name].resolve(data);
-      delete workerPool[name];
+      if (workerPool[name]) {
+        workerPool[name].resolve(data);
+        delete workerPool[name];
+      }
     }
 
     function getDevice(response) {
