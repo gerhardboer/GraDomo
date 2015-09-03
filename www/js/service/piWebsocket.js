@@ -53,7 +53,7 @@
     function initSocket() {
       socket.connecting = true;
 
-      oWebsocket = new WebSocket('ws://home.gerhardboer.nl:5001/websocket');
+      oWebsocket = new WebSocket('ws://:5001/websocket');
       if (oWebsocket) {
         oWebsocket.onopen = function (evt) {
           socket.connecting = false;
