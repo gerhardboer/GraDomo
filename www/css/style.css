@@ -14,3 +14,12 @@ ion-content {
   padding-top: 7px;
   padding-right: 10px;
 }
+
+.action-menu {
+  position: absolute;
+  bottom: 45px;
+  right: 0;
+}
+.action-menu a {
+  float: right;
+}

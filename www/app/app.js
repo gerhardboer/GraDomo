@@ -37,7 +37,7 @@ angular.module('GraDomo', ['ionic', 'toastr'])
       }
 
       document.addEventListener("resume", function () {
-        $rootScope.$broadcast('reloadSocket');
+        $rootScope.$broadcast('reloadSockets');
       }, false);
     });
   });

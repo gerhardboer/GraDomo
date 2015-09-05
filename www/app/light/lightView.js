@@ -16,6 +16,10 @@
     $scope.$on('light-websocketClosed', websocketClosed);
     $scope.$on('light-websocketError', websocketError);
 
+    (function init() {
+        getGUI();
+    })();
+
     function getGUI() {
       lightService.requestGUI()
         .then(showGUI)
@@ -26,17 +30,18 @@
       showGUILoaded();
     }
 
-    function websocketOpened() {
-      getGUI();
-      piToastr('info', 'Websocket connected');
+    function websocketOpened(evt, socketEvt) {
+      console.log(evt);
+
+      piToastr('info', socketEvt.srcElement.url + ' connected');
     }
 
     function websocketClosed() {
-      piToastr('info', 'Websocket closed');
+      piToastr('info', 'Light socket closed');
     }
 
-    function websocketError(evt) {
-      piToastr('error', 'Websocket error');
+    function websocketError(evt, socketEvt) {
+      piToastr('error', socketEvt.srcElement.url + ' error');
     }
 
     function showGUILoaded() {

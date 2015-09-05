@@ -12,8 +12,14 @@
 
     socket.workerPool = {};
 
-    socket.lightSocket = initLightSocket();
-    socket.cameraSocket = initCameraSocket();
+    $rootScope.$on('reloadSockets', init);
+
+    function init() {
+      socket.lightSocket = initLightSocket();
+      socket.cameraSocket = initCameraSocket();
+    }
+
+    init();
 
     function initLightSocket() {
       return new Socket('light', getUrlBasedOnPlatform(5001, 'websocket'), lightMessageHandler);
@@ -26,7 +32,7 @@
           if (response.origin === 'update') {
             socket.workerPool[response.devices[0]].resolve(response);
           }
-        } else if(response.gui) {
+        } else if (response.gui) {
           socket.workerPool['gui'].resolve(response);
         }
       }
@@ -45,15 +51,22 @@
       if (ionic.Platform.isAndroid()) {
         host = 'localhost';
       }
-      return 'ws://' + host + ':'+ port +'/'+address;
+      return 'ws://' + host + ':' + port + '/' + address;
     }
 
     function Socket(name, url, handler) {
-      this.oWebsocket = new WebSocket(url);
+      var socket = this;
+      socket.todo = [];
+      socket.oWebsocket = new WebSocket(url);
+
 
       if (this.oWebsocket) {
+        this.oWebsocket.onmessage = handler;
+
         this.oWebsocket.onopen = function (evt) {
-          $rootScope.$broadcast(name + '-websocketOpened');
+          $rootScope.$broadcast(name + '-websocketOpened', evt);
+
+          socket.onOpen(evt);
         };
 
         this.oWebsocket.onclose = function (evt) {
@@ -65,16 +78,24 @@
           console.log(evt);
           $rootScope.$broadcast(name + '-websocketError', evt);
         };
-
-        this.oWebsocket.onmessage = handler;
       }
-
     }
 
-    Socket.prototype.send = function(key, message) {
+    Socket.prototype.onOpen = function (evt) {
+      for (var i = 0; i < this.todo.length; i++) {
+        this.oWebsocket.send(this.todo[i]);
+      }
+      this.todo = [];
+    };
+
+    Socket.prototype.send = function (key, message) {
       var deferred = createPromise(key);
 
-      this.oWebsocket.send(message);
+      if (this.oWebsocket.readyState !== 1) {
+        this.todo.push(message);
+      } else {
+        this.oWebsocket.send(message);
+      }
 
       return deferred.promise;
     };
