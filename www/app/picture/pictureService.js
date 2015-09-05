@@ -22,8 +22,12 @@
       function parseData(response) {
         return {
           url: response.data,
-          date: Date.now()
+          date: getDateFromImage(response.data)
         }
+      }
+
+      function getDateFromImage(image) {
+        return image.substring(image.indexOf('-')+1, image.indexOf('.jpg'));
       }
     }
 

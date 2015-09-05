@@ -9,7 +9,7 @@
 
       <div class="item">
         <h2>Latest image</h2>
-        <p>{{vm.latestImage.date}}</p>
+        <p>{{vm.latestImage.date | date : 'dd-MM-yyyy HH:mm'}}</p>
       </div>
     </div>
 
@@ -20,7 +20,7 @@
       </div>
 
       <div class="item">
-        <h2>{{image.date}}</h2>
+        <h2>{{image.date | date : 'dd-MM-yyyy HH:mm'}}</h2>
       </div>
     </div>
   </ion-content>
