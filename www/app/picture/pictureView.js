@@ -44,8 +44,9 @@
     }
 
     function websocketOpened(evt, socketEvt) {
-      console.log(evt);
-
+      if(!vm.latestImage) {
+        getLatestPicture();
+      }
       piToastr('info', socketEvt.srcElement.url + ' connected');
     }
 

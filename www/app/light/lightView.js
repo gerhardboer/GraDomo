@@ -31,8 +31,9 @@
     }
 
     function websocketOpened(evt, socketEvt) {
-      console.log(evt);
-
+      if(!vm.gui) {
+        getGUI();
+      }
       piToastr('info', socketEvt.srcElement.url + ' connected');
     }
 
