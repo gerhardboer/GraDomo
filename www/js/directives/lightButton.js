@@ -2,16 +2,14 @@
   angular.module('GraDomo')
     .directive('lightButton', LightButton);
 
-  LightButton.$inject = ['$timeout', 'lightService', 'toastr'];
+  LightButton.$inject = ['$timeout', 'lightService', 'piToastr'];
 
-  function LightButton($timeout, lightService, toastr) {
+  function LightButton($timeout, lightService, piToastr) {
     return {
       restrict: 'EA',
       replace: true,
       scope: {
-        room: '=',
         device: '=',
-        name: '=',
         type: '@'
       },
       controller: LightButtonController,
@@ -34,25 +32,25 @@
       vm.execute = function () {
         vm.executing = true;
         if (vm.isOn) {
-          lightService.sendOn(vm.room, vm.device)
+          lightService.sendOn(vm.device.id)
             .then(showNewState)
         }
 
         if (vm.isOff) {
-          lightService.sendOff(vm.room, vm.device)
+          lightService.sendOff(vm.device.id)
             .then(showNewState);
         }
 
         $timeout(function () {
           if(vm.executing) {
             vm.executing = false;
-            toastr.warning('No response, state unchanged', {timeOut: 500})
+            piToastr('warning', 'No response, state unchanged');
           }
-        }, 1500)
+        }, 2000)
       };
 
       function showNewState(newState) {
-        toastr.success(vm.name + ': ' + newState.state, {timeOut: 500});
+        piToastr('success', vm.device.name + ': ' + newState.state);
         vm.executing = false;
       }
     }

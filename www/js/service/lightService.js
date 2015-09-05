@@ -8,26 +8,24 @@
   LightService.$inject = ['$q', 'piWebsocket'];
 
   function LightService($q, piWebsocket) {
-    this.getConfig = getConfig;
+    this.requestGUI = requestGUI;
     this.sendOn = sendOn;
     this.sendOff = sendOff;
 
     this.turnOnDevices = turnOnDevices;
     this.turnOffDevices = turnOffDevices;
 
-    function getConfig() {
-      return piWebsocket.requestConfig()
+    function requestGUI() {
+      return piWebsocket.requestGUI()
         .then(function (response) {
-          if (response.config !== undefined) {
-            return response.config;
+          if (response.gui !== undefined) {
+            return new GUI(response.gui).getGUI();
           }
         });
     }
 
     function turnOnDevices(devices, room) {
-      var promises = devices.map(function (device) {
-        return sendOn(room, device);
-      });
+      var promises = createPromises(devices, sendOn);
 
       return $q.all(promises)
         .then(function (result) {
@@ -36,9 +34,7 @@
     }
 
     function turnOffDevices(devices, room) {
-      var promises = devices.map(function (device) {
-        return sendOff(room, device);
-      });
+      var promises = createPromises(devices, sendOff);
 
       return $q.all(promises)
         .then(function (result) {
@@ -46,36 +42,29 @@
         });
     }
 
-    function sendOn(room, device) {
-      return sendNewStateRequest("on", room, device);
+    function createPromises(devices, fn) {
+      return Object.keys(devices)
+        .map(function (device) {
+          return fn(device);
+        });
     }
 
-    function sendOff(room, device) {
-      return sendNewStateRequest("off", room, device);
+    function sendOn(device) {
+      return sendLightToggleMessage("on", device);
     }
 
-    function sendNewStateRequest(newState, room, device) {
-      var message = {
-        "message": "send",
-        "code": {
-          "location": room,
-          "device": device,
-          "state": newState
-        }
-      };
-
-      return sendLightToggleMessage(message, device);
+    function sendOff(device) {
+      return sendLightToggleMessage("off", device);
     }
 
-    function sendLightToggleMessage(message, device) {
-      return piWebsocket.send(angular.toJson(message), device)
+    function sendLightToggleMessage(newState, device) {
+      return piWebsocket.send(newState, device)
         .then(parseResult)
     }
 
     function parseResult(response) {
-      var key = Object.keys(response.devices)[0];
       return {
-        device: response.devices[key],
+        device: response.devices[0],
         state: response.values.state
       };
     }

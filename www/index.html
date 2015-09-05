@@ -24,8 +24,12 @@
   <!-- your app's js -->
   <script src="js/app.js"></script>
   <script src="js/view/view.js"></script>
+  <script src="js/view/GUI.js"></script>
+
   <script src="js/service/lightService.js"></script>
-  <script src="js/service/piWebsocket.js"></script>
+
+  <script src="js/utils/piToastr.js"></script>
+  <script src="js/utils/piWebsocket.js"></script>
 
   <script src="js/directives/lightButton.js"></script>
   <script src="js/directives/roomButton.js"></script>
@@ -36,33 +40,33 @@
 <ion-pane>
   <ion-header-bar align-title="left" class="bar-light">
     <h1 class="title">GraDomo</h1>
-    <button ng-click="vm.reloadConfig()" class="button icon ion-refresh"></button>
+    <button ng-click="vm.reloadGUI()" class="button icon ion-refresh"></button>
   </ion-header-bar>
   <ion-content>
     <div class="list">
-      <div ng-repeat="(roomKey, roomConfig) in vm.config track by $index">
+      <div ng-repeat="(room, devices) in vm.gui track by $index">
         <div class="item item-divider">
           <div class="row">
             <div class="col-75">
-              <p class="padding">{{roomConfig.name}}</p>
+              <p class="padding">{{room}}</p>
             </div>
 
             <div class="button-bar col-25">
-              <room-button type="on" room="roomKey" config="roomConfig"></room-button>
-              <room-button type="off" room="roomKey" config="roomConfig"></room-button>
+              <room-button type="on" room="room" devices="devices"></room-button>
+              <room-button type="off" room="room" devices="devices"></room-button>
             </div>
           </div>
 
-          <div ng-repeat="(device, deviceConfig) in roomConfig  track by $index">
+          <div ng-repeat="device in devices track by $index">
 
-            <div class="item" ng-if="vm.isDevice(deviceConfig)">
+            <div class="item">
               <div class="padding text-center">
-                <h2>{{deviceConfig.name}}</h2>
+                <h2>{{device.name}}</h2>
               </div>
 
               <div class="button-bar">
-                <light-button type="on" room="roomKey" device="device" name="deviceConfig.name"></light-button>
-                <light-button type="off" room="roomKey" device="device" name="deviceConfig.name"></light-button>
+                <light-button type="on" device="device"></light-button>
+                <light-button type="off" device="device"></light-button>
               </div>
 
             </div>

@@ -13,23 +13,33 @@
       workerPool = {};
 
     socket.send = send;
-    socket.requestConfig = requestConfig;
+    socket.requestGUI = requestGUI;
 
     initSocket();
 
     $rootScope.$on('reloadSocket', initSocket);
 
-    function requestConfig() {
+    function requestGUI() {
       var deferred = createOrGetPromise('config');
 
-      safeSend("{\"message\":\"request config\"}");
+      var message = {
+        "action": "request config"
+      };
+      safeSend(message);
 
       return deferred.promise;
     }
 
-    function send(message, device) {
+    function send(newState, device) {
       var deferred = createOrGetPromise(device);
 
+      var message = {
+        "action": "control",
+        "code": {
+          "device": device,
+          "state": newState
+        }
+      };
       safeSend(message);
 
       return deferred.promise;
@@ -37,7 +47,7 @@
 
     function safeSend(message) {
       if (!socket.connecting) {
-        oWebsocket.send(message);
+        oWebsocket.send(angular.toJson(message));
       }
     }
 
@@ -53,12 +63,12 @@
     function initSocket() {
       socket.connecting = true;
 
-      oWebsocket = new WebSocket('ws://home.gerhardboer.nl:5001/websocket');
+      oWebsocket = new WebSocket(getUrlBasedOnPlatform());
       if (oWebsocket) {
         oWebsocket.onopen = function (evt) {
           socket.connecting = false;
 
-          requestConfig();
+          requestGUI();
 
           $rootScope.$broadcast('websocketOpened');
         };
@@ -66,13 +76,19 @@
           $rootScope.$broadcast('websocketClosed');
         };
         oWebsocket.onerror = function (evt) {
-          $rootScope.$broadcast('websocketError');
+          console.log(evt);
+          $rootScope.$broadcast('websocketError', evt);
         };
         oWebsocket.onmessage = function (evt) {
           if (evt.data) {
             var response = angular.fromJson(evt.data);
-            var key = response.config ? 'config' : getDevice(response);
-            resolve(key, response);
+            if (response.origin) {
+              if (response.origin === 'update') {
+                resolve(response.devices[0], response);
+              }
+            } else {
+              resolve('config', response);
+            }
           }
         }
       }
@@ -85,9 +101,13 @@
       }
     }
 
-    function getDevice(response) {
-      var firstKey = Object.keys(response.devices)[0];
-      return response.devices[firstKey][0];
+
+    function getUrlBasedOnPlatform() {
+      var host = '192.168.0.18';
+      if (ionic.Platform.isAndroid()) {
+        host = 'localhost';
+      }
+      return 'ws://' + host + ':5001/websocket';
     }
   }
 })(angular);

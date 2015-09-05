@@ -5,55 +5,45 @@
   angular.module('GraDomo')
     .controller('viewCtrl', ViewCtrl);
 
-  ViewCtrl.$inject = ['$scope', '$timeout', 'lightService', 'toastr'];
+  ViewCtrl.$inject = ['$scope', 'lightService', 'piToastr'];
 
-  function ViewCtrl($scope, $timeout, lightService, toastr) {
+  function ViewCtrl($scope, lightService, piToastr) {
     var vm = this;
 
-    this.reloadConfig = getConfig;
-    this.isDevice = isDevice;
+    this.reloadGUI = getGUI;
 
     $scope.$on('websocketOpened', websocketOpened);
     $scope.$on('websocketClosed', websocketClosed);
     $scope.$on('websocketError', websocketError);
 
     (function init() {
-      getConfig();
+      getGUI();
     })();
 
-    function getConfig() {
-      lightService.getConfig()
-        .then(showConfig)
+    function getGUI() {
+      lightService.requestGUI()
+        .then(showGUI)
     }
 
-    function showConfig(config) {
-      showConfigLoaded();
-      vm.config = config;
-    }
-
-    function isDevice(device) {
-      return angular.isObject(device);
+    function showGUI(gui) {
+      showGUILoaded();
+      vm.gui = gui;
     }
 
     function websocketOpened() {
-      showToast(toastr.info, 'Websocket connected');
+      piToastr('info', 'Websocket connected');
     }
 
     function websocketClosed() {
-      showToast(toastr.info, 'Websocket closed');
+      piToastr('info', 'Websocket closed');
     }
 
-    function websocketError() {
-      showToast(toastr.error, 'Websocket error');
+    function websocketError(evt) {
+      piToastr('error', 'Websocket error');
     }
 
-    function showConfigLoaded() {
-      showToast(toastr.info, 'Config loaded')
+    function showGUILoaded() {
+      piToastr('info', 'GUI loaded');
     }
-
-    function showToast(toastrFn, message) {
-      toastrFn(message, {timeOut: 500});
-    }
-
   }
 })(angular);
