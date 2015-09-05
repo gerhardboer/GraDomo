@@ -12,15 +12,15 @@ angular.module('GraDomo', ['ionic', 'toastr'])
     $stateProvider.
       state('light', {
         url: '/',
-        templateUrl: 'js/light/LightView.html'
+        templateUrl: 'app/light/LightView.html'
       })
       .state('picture', {
         url: '/picture',
-        templateUrl: 'js/picture/pictureView.html'
+        templateUrl: 'app/picture/pictureView.html'
       })
       .state('video', {
         url: '/video',
-        templateUrl: 'js/video/videoView.html'
+        templateUrl: 'app/video/videoView.html'
       });
 
     $urlRouterProvider.otherwise('/');
