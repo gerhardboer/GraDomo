@@ -8,106 +8,86 @@
   PiWebsocket.$inject = ['$q', '$rootScope'];
 
   function PiWebsocket($q, $rootScope) {
-    var oWebsocket,
-      socket = this,
-      workerPool = {};
+    var socket = this;
 
-    socket.send = send;
-    socket.requestGUI = requestGUI;
+    socket.workerPool = {};
 
-    initSocket();
+    socket.lightSocket = initLightSocket();
+    //socket.cameraSocket = initCameraSocket();
 
-    $rootScope.$on('reloadSocket', initSocket);
+    //$rootScope.$on('reloadSocket', initSockets);
 
-    function requestGUI() {
-      var deferred = createOrGetPromise('config');
 
-      var message = {
-        "action": "request config"
-      };
-      safeSend(message);
-
-      return deferred.promise;
+    function initLightSocket() {
+      return new Socket('light', getLightUrlBasedOnPlatform(), lightMessageHandler);
     }
 
-    function send(newState, device) {
-      var deferred = createOrGetPromise(device);
-
-      var message = {
-        "action": "control",
-        "code": {
-          "device": device,
-          "state": newState
-        }
-      };
-      safeSend(message);
-
-      return deferred.promise;
-    }
-
-    function safeSend(message) {
-      if (!socket.connecting) {
-        oWebsocket.send(angular.toJson(message));
-      }
-    }
-
-    function createOrGetPromise(name) {
-      var deferred = $q.defer();
-      if (!workerPool[name]) {
-        workerPool[name] = deferred;
-      }
-
-      return deferred
-    }
-
-    function initSocket() {
-      socket.connecting = true;
-
-      oWebsocket = new WebSocket(getUrlBasedOnPlatform());
-      if (oWebsocket) {
-        oWebsocket.onopen = function (evt) {
-          socket.connecting = false;
-
-          requestGUI();
-
-          $rootScope.$broadcast('websocketOpened');
-        };
-        oWebsocket.onclose = function (evt) {
-          $rootScope.$broadcast('websocketClosed');
-        };
-        oWebsocket.onerror = function (evt) {
-          console.log(evt);
-          $rootScope.$broadcast('websocketError', evt);
-        };
-        oWebsocket.onmessage = function (evt) {
-          if (evt.data) {
-            var response = angular.fromJson(evt.data);
-            if (response.origin) {
-              if (response.origin === 'update') {
-                resolve(response.devices[0], response);
-              }
-            } else {
-              resolve('config', response);
-            }
-          }
-        }
-      }
-    }
-
-    function resolve(name, data) {
-      if (workerPool[name]) {
-        workerPool[name].resolve(data);
-        delete workerPool[name];
-      }
-    }
-
-
-    function getUrlBasedOnPlatform() {
+    function getLightUrlBasedOnPlatform() {
       var host = '192.168.0.18';
       if (ionic.Platform.isAndroid()) {
         host = 'localhost';
       }
       return 'ws://' + host + ':5001/websocket';
     }
+
+    function lightMessageHandler(evt) {
+      if (evt.data) {
+        var response = angular.fromJson(evt.data);
+        if (response.origin) {
+          if (response.origin === 'update') {
+            socket.workerPool[response.devices[0]].resolve(response);
+          }
+        } else if(response.gui) {
+          socket.workerPool['gui'].resolve(response);
+        }
+      }
+    }
+
+    function initCameraSocket() {
+      return new Socket('camera', 'ws://localhost:3000', cameraMessageHandler);
+    }
+
+    function cameraMessageHandler(evt) {
+
+    }
+
+    function Socket(name, url, handler) {
+      this.oWebsocket = new WebSocket(url);
+
+      if (this.oWebsocket) {
+        this.oWebsocket.onopen = function (evt) {
+          $rootScope.$broadcast(name + '-websocketOpened');
+        };
+
+        this.oWebsocket.onclose = function (evt) {
+          $rootScope.$broadcast(name + '-websocketClosed');
+        };
+
+        this.oWebsocket.onerror = function (evt) {
+          console.log(evt);
+          $rootScope.$broadcast(name + '-websocketError', evt);
+        };
+
+        this.oWebsocket.onmessage = handler;
+      }
+
+    }
+
+    Socket.prototype.send = function(key, message) {
+      var deferred = createPromise(key);
+
+      this.oWebsocket.send(angular.toJson(message));
+
+      return deferred.promise;
+    };
+
+    function createPromise(name) {
+      var deferred = $q.defer();
+
+      socket.workerPool[name] = deferred;
+
+      return deferred
+    }
+
   }
 })(angular);

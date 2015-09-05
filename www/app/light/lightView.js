@@ -12,13 +12,9 @@
 
     this.reloadGUI = getGUI;
 
-    $scope.$on('websocketOpened', websocketOpened);
-    $scope.$on('websocketClosed', websocketClosed);
-    $scope.$on('websocketError', websocketError);
-
-    (function init() {
-      getGUI();
-    })();
+    $scope.$on('light-websocketOpened', websocketOpened);
+    $scope.$on('light-websocketClosed', websocketClosed);
+    $scope.$on('light-websocketError', websocketError);
 
     function getGUI() {
       lightService.requestGUI()
@@ -31,6 +27,7 @@
     }
 
     function websocketOpened() {
+      getGUI();
       piToastr('info', 'Websocket connected');
     }
 

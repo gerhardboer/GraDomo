@@ -16,7 +16,11 @@
     this.turnOffDevices = turnOffDevices;
 
     function requestGUI() {
-      return piWebsocket.requestGUI()
+      var message = {
+        "action": "request config"
+      };
+
+      return piWebsocket.lightSocket.send('gui', message)
         .then(function (response) {
           if (response.gui !== undefined) {
             return response.gui;
@@ -58,7 +62,14 @@
     }
 
     function sendLightToggleMessage(newState, device) {
-      return piWebsocket.send(newState, device)
+      var message = {
+        "action": "control",
+        "code": {
+          "device": device,
+          "state": newState
+        }
+      };
+      return piWebsocket.lightSocket.send(device, message)
         .then(parseResult)
     }
 
