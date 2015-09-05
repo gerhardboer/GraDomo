@@ -4,10 +4,26 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('GraDomo', ['ionic', 'toastr'])
-  .config(function (toastrConfig) {
+  .config(function (toastrConfig, $stateProvider, $urlRouterProvider) {
     angular.extend(toastrConfig, {
       positionClass: 'toast-bottom-right'
     });
+
+    $stateProvider.
+      state('light', {
+        url: '/',
+        templateUrl: 'js/light/lightView.html'
+      })
+      .state('picture', {
+        url: '/picture',
+        templateUrl: 'js/picture/pictureView.html'
+      })
+      .state('video', {
+        url: '/video',
+        templateUrl: 'js/video/videoView.html'
+      });
+
+    $urlRouterProvider.otherwise('/');
   })
   .run(function ($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function () {

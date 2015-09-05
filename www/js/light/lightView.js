@@ -3,11 +3,11 @@
  */
 (function (angular) {
   angular.module('GraDomo')
-    .controller('GraDomoCtrl', GraDomoCtrl);
+    .controller('LightView', LightView);
 
-  GraDomoCtrl.$inject = ['$scope', 'lightService', 'piToastr'];
+  LightView.$inject = ['$scope', 'lightService', 'piToastr'];
 
-  function GraDomoCtrl($scope, lightService, piToastr) {
+  function LightView($scope, lightService, piToastr) {
     var vm = this;
 
     this.reloadGUI = getGUI;
