@@ -1,5 +1,15 @@
 <ion-view view-title="Picture">
-  <ion-content>
-    picture content
+  <ion-content ng-controller="pictureView as vm">
+    <div class="list card">
+
+      <div class="item item-image">
+        <img ng-src="{{vm.latestImage.url}}">
+      </div>
+
+      <div class="item">
+        <h2>Latest image</h2>
+        <p>{{vm.latestImage.date}}</p>
+      </div>
+    </div>
   </ion-content>
 </ion-view>
