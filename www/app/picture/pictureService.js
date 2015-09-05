@@ -2,9 +2,9 @@
     angular.module('GraDomo')
         .service('pictureService', service);
 
-    service.$inject = ['$q', 'piWebsocket'];
+    service.$inject = ['$q', 'piWebsocket', 'IMAGE_URL'];
 
-    function service($q, piWebsocket) {
+    function service($q, piWebsocket, IMAGE_URL) {
 
       this.getNewPicture = getNewPicture;
       this.getLatestPicture = getLatestPicture;
@@ -21,15 +21,9 @@
 
       function parseData(response) {
         return {
-          url: buildUrl(response),
+          url: IMAGE_URL + response.data,
           date: getDateFromImage(response.data)
         }
-      }
-
-      function buildUrl(response) {
-        return response.srcElement.url
-            .replace('ws://', 'http://')
-            .replace('5002', '5003') + response.data;
       }
 
       function getDateFromImage(image) {

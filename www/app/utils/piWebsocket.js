@@ -5,9 +5,9 @@
   angular.module('GraDomo')
     .service('piWebsocket', PiWebsocket);
 
-  PiWebsocket.$inject = ['$q', '$rootScope'];
+  PiWebsocket.$inject = ['$q', '$rootScope', 'LIGHT_URL', 'CAMERA_URL'];
 
-  function PiWebsocket($q, $rootScope) {
+  function PiWebsocket($q, $rootScope, LIGHT_URL, CAMERA_URL) {
     var socket = this;
 
     socket.workerPool = {};
@@ -22,7 +22,7 @@
     init();
 
     function initLightSocket() {
-      return new Socket('light', getUrlBasedOnPlatform(5001, 'websocket'), lightMessageHandler);
+      return new Socket('light', LIGHT_URL, lightMessageHandler);
     }
 
     function lightMessageHandler(evt) {
@@ -39,19 +39,11 @@
     }
 
     function initCameraSocket() {
-      return new Socket('camera', getUrlBasedOnPlatform(5002, ''), cameraMessageHandler);
+      return new Socket('camera', CAMERA_URL, cameraMessageHandler);
     }
 
     function cameraMessageHandler(evt) {
       socket.workerPool['camera'].resolve(evt);
-    }
-
-    function getUrlBasedOnPlatform(port, address) {
-      var host = '192.168.0.18';
-      if (ionic.Platform.isAndroid()) {
-        host = 'localhost';
-      }
-      return 'ws://' + host + ':' + port + '/' + address;
     }
 
     function Socket(name, url, handler) {
