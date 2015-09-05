@@ -21,9 +21,15 @@
 
       function parseData(response) {
         return {
-          url: response.data,
+          url: buildUrl(response),
           date: getDateFromImage(response.data)
         }
+      }
+
+      function buildUrl(response) {
+        return response.srcElement.url
+            .replace('ws://', 'http://')
+            .replace('5002', '5003') + response.data;
       }
 
       function getDateFromImage(image) {

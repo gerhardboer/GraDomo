@@ -5,7 +5,8 @@
   ctrl.$inject = ['$scope', 'pictureService', 'piToastr'];
 
   function ctrl($scope, pictureService, piToastr) {
-    var vm = this;
+    var vm = this,
+      executing = false;
 
     vm.history = [];
     vm.latestImage = null;
@@ -21,10 +22,13 @@
     })();
 
     function getLatestPicture() {
-      pictureService.getLatestPicture()
-        .then(showPicture);
+      if(!executing) {
+        executing = true;
+        pictureService.getLatestPicture()
+          .then(showPicture);
 
-      piToastr('info', 'retrieving latest picture')
+        piToastr('info', 'retrieving latest picture')
+      }
     }
 
     function getNewPicture() {
@@ -38,13 +42,14 @@
     }
 
     function showPicture(picture) {
+      executing = false;
       vm.latestImage = picture;
 
       piToastr('success', 'Image loaded');
     }
 
     function websocketOpened(evt, socketEvt) {
-      if(!vm.latestImage) {
+      if (!vm.latestImage) {
         getLatestPicture();
       }
       piToastr('info', socketEvt.srcElement.url + ' connected');
