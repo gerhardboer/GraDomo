@@ -1,0 +1,35 @@
+<ion-view view-title="Lights">
+  <ion-content ng-controller="LightView as vm">
+    <div class="list">
+      <div ng-repeat="(room, devices) in vm.gui track by $index">
+        <div class="item item-divider">
+          <div class="row">
+            <div class="col-75">
+              <p class="padding">{{room}}</p>
+            </div>
+
+            <div class="button-bar col-25">
+              <room-button type="on" room="room" devices="devices"></room-button>
+              <room-button type="off" room="room" devices="devices"></room-button>
+            </div>
+          </div>
+
+          <div ng-repeat="device in devices track by $index">
+
+            <div class="item">
+              <div class="padding text-center">
+                <h2>{{device.name}}</h2>
+              </div>
+
+              <div class="button-bar">
+                <light-button type="on" device="device"></light-button>
+                <light-button type="off" device="device"></light-button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
