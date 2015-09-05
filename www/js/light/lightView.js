@@ -26,8 +26,8 @@
     }
 
     function showGUI(gui) {
+      vm.gui = transformGUI(gui);
       showGUILoaded();
-      vm.gui = gui;
     }
 
     function websocketOpened() {
@@ -45,5 +45,21 @@
     function showGUILoaded() {
       piToastr('info', 'GUI loaded');
     }
+  }
+
+  function transformGUI(gui) {
+      var rooms = {};
+
+      angular.forEach(gui, function (device, deviceKey) {
+        device.group.forEach(function (room) {
+          if (rooms[room] === undefined) {
+            rooms[room] = {};
+          }
+          device.id = deviceKey;
+          rooms[room][deviceKey] = (device);
+        });
+      });
+
+    return rooms;
   }
 })(angular);

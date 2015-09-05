@@ -19,7 +19,7 @@
       return piWebsocket.requestGUI()
         .then(function (response) {
           if (response.gui !== undefined) {
-            return new GUI(response.gui).getGUI();
+            return response.gui;
           }
         });
     }
