@@ -13,21 +13,10 @@
     socket.workerPool = {};
 
     socket.lightSocket = initLightSocket();
-    //socket.cameraSocket = initCameraSocket();
-
-    //$rootScope.$on('reloadSocket', initSockets);
-
+    socket.cameraSocket = initCameraSocket();
 
     function initLightSocket() {
-      return new Socket('light', getLightUrlBasedOnPlatform(), lightMessageHandler);
-    }
-
-    function getLightUrlBasedOnPlatform() {
-      var host = '192.168.0.18';
-      if (ionic.Platform.isAndroid()) {
-        host = 'localhost';
-      }
-      return 'ws://' + host + ':5001/websocket';
+      return new Socket('light', getUrlBasedOnPlatform(5001, 'websocket'), lightMessageHandler);
     }
 
     function lightMessageHandler(evt) {
@@ -44,11 +33,19 @@
     }
 
     function initCameraSocket() {
-      return new Socket('camera', 'ws://localhost:3000', cameraMessageHandler);
+      return new Socket('camera', getUrlBasedOnPlatform(5002, ''), cameraMessageHandler);
     }
 
     function cameraMessageHandler(evt) {
+      socket.workerPool['camera'].resolve(evt);
+    }
 
+    function getUrlBasedOnPlatform(port, address) {
+      var host = '192.168.0.18';
+      if (ionic.Platform.isAndroid()) {
+        host = 'localhost';
+      }
+      return 'ws://' + host + ':'+ port +'/'+address;
     }
 
     function Socket(name, url, handler) {
@@ -60,6 +57,7 @@
         };
 
         this.oWebsocket.onclose = function (evt) {
+          console.log(evt);
           $rootScope.$broadcast(name + '-websocketClosed');
         };
 
@@ -76,7 +74,7 @@
     Socket.prototype.send = function(key, message) {
       var deferred = createPromise(key);
 
-      this.oWebsocket.send(angular.toJson(message));
+      this.oWebsocket.send(message);
 
       return deferred.promise;
     };

@@ -2,18 +2,24 @@
   angular.module('GraDomo')
     .controller('pictureView', ctrl);
 
-  ctrl.$inject = ['pictureService'];
+  ctrl.$inject = ['$scope', 'pictureService'];
 
-  function ctrl(pictureService) {
+  function ctrl($scope, pictureService) {
     var vm = this;
 
     vm.latestImage = null;
 
-    (function init() {
+    $scope.$on('camera-websocketOpened', websocketOpened);
+
+    function websocketOpened() {
+      getLatestPicture();
+    }
+
+    function getLatestPicture() {
       vm.latestImage = null;
       pictureService.getLatestPicture()
         .then(showPicture);
-    })();
+    }
 
     function showPicture(picture) {
       vm.latestImage = picture;

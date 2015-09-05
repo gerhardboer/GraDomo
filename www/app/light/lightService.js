@@ -20,7 +20,7 @@
         "action": "request config"
       };
 
-      return piWebsocket.lightSocket.send('gui', message)
+      return send('gui', message)
         .then(function (response) {
           if (response.gui !== undefined) {
             return response.gui;
@@ -69,8 +69,12 @@
           "state": newState
         }
       };
-      return piWebsocket.lightSocket.send(device, message)
+      return send(device, message)
         .then(parseResult)
+    }
+
+    function send(key, message) {
+      return piWebsocket.lightSocket.send(key, angular.toJson(message));
     }
 
     function parseResult(response) {

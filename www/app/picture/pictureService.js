@@ -2,17 +2,22 @@
     angular.module('GraDomo')
         .service('pictureService', service);
 
-    service.$inject = ['$q'];
+    service.$inject = ['$q', 'piWebsocket'];
 
-    function service($q) {
+    function service($q, piWebsocket) {
 
       this.getLatestPicture = getLatestPicture;
 
       function getLatestPicture() {
-        return $q.when({
-          url: '/img/ionic.png',
-          date: '05-09-2015 12:00:00'
-        });
+        return piWebsocket.cameraSocket.send('camera', "getLatestPicture")
+          .then(parseData);
+      }
+
+      function parseData(response) {
+        return {
+          url: response.data,
+          date: 'now'
+        }
       }
     }
 
