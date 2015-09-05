@@ -12,7 +12,7 @@ angular.module('GraDomo', ['ionic', 'toastr'])
     $stateProvider.
       state('light', {
         url: '/',
-        templateUrl: 'js/light/LightView.html'
+        templateUrl: 'js/light/lightView.html'
       })
       .state('picture', {
         url: '/picture',
