@@ -12,7 +12,7 @@
     .value('IMAGE_URL', 'http://' + host + ':' +5003 + '/')
     .config(function (toastrConfig, $stateProvider, $urlRouterProvider) {
       angular.extend(toastrConfig, {
-        positionClass: 'toast-bottom-right'
+        positionClass: 'toast-top-right'
       });
 
       $stateProvider.
@@ -50,9 +50,15 @@
 
   function getHostBasedOnPlatform() {
     var host = '192.168.0.18';
-    if (ionic.Platform.isAndroid()) {
+    if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
       host = 'localhost';
     }
+
     return host;
+  }
+
+  function isOnHomeWifi() {
+    return window.Connection &&
+        navigator.connection.type === Connection.WIFI
   }
 })(angular);
