@@ -23,9 +23,17 @@
       return send('gui', message)
         .then(function (response) {
           if (response.gui !== undefined) {
-            return response.gui;
+            return addDeviceState(response.gui, response.devices);
           }
         });
+    }
+
+    function addDeviceState(gui, devices) {
+      Object.keys(gui).map(function (guiKey) {
+          gui[guiKey].state = devices[guiKey].state;
+      });
+
+      return gui;
     }
 
     function turnOnDevices(devices, room) {
