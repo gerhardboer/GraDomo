@@ -6,9 +6,11 @@
 (function () {
   var host = getHostBasedOnPlatform();
 
+
   angular.module('GraDomo', ['ionic', 'toastr'])
     .value('LIGHT_URL', 'ws://' + host + ':' + 5001 + '/websocket')
     .value('CAMERA_URL', 'ws://' + host + ':' +5002 + '/')
+    .value('VIDEO_URL', 'ws://' + host + ':' + 5004 + '/')
     .value('IMAGE_URL', 'http://' + host + ':' +5003 + '/')
     .config(function (toastrConfig, $stateProvider, $urlRouterProvider) {
       angular.extend(toastrConfig, {
@@ -47,7 +49,6 @@
         }, false);
       });
     });
-
   function getHostBasedOnPlatform() {
     var host = '192.168.0.18';
     if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {

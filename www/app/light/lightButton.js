@@ -33,26 +33,13 @@
         vm.executing = true;
         if (vm.isOn) {
           lightService.sendOn(vm.device.id)
-            .then(showNewState)
         }
 
         if (vm.isOff) {
           lightService.sendOff(vm.device.id)
-            .then(showNewState);
         }
-
-        $timeout(function () {
-          if(vm.executing) {
-            vm.executing = false;
-            piToastr('warning', 'No response, state unchanged');
-          }
-        }, 2000)
       };
 
-      function showNewState(newState) {
-        piToastr('success', vm.device.name + ': ' + newState.state);
-        vm.executing = false;
-      }
     }
   }
 })(angular);

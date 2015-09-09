@@ -41,30 +41,16 @@
         if (vm.isOff) {
           turnOffRoom();
         }
-
-        $timeout(function () {
-          if(vm.executing) {
-            vm.executing = false;
-            piToastr('warning', 'No response, state unchanged');
-          }
-        }, 5000)
       };
 
       function turnOnRoom() {
         lightService.turnOnDevices(vm.devices, vm.room)
-          .then(showNewState);
 
       }
 
       function turnOffRoom() {
         lightService.turnOffDevices(vm.devices, vm.room)
-          .then(showNewState);
 
-      }
-
-      function showNewState(newState) {
-        piToastr('success', vm.room + ': ' + newState.state);
-        vm.executing = false;
       }
     }
   }

@@ -2,21 +2,31 @@
     angular.module('GraDomo')
         .service('pictureService', service);
 
-    service.$inject = ['$q', 'piWebsocket', 'IMAGE_URL'];
+    service.$inject = ['piWebsocket', 'IMAGE_URL'];
 
-    function service($q, piWebsocket, IMAGE_URL) {
+    function service(piWebsocket, IMAGE_URL) {
 
       this.getNewPicture = getNewPicture;
       this.getLatestPicture = getLatestPicture;
 
+      this.socket = initSocket();
+
+      function initSocket() {
+        return piWebsocket('picture', responseHandler);
+      }
+
+      function responseHandler(evt) {
+        if (evt.data) {
+          $rootScope.$broadcast('picture-update', parseData(evt.data));
+        }
+      }
+
       function getNewPicture() {
-        return piWebsocket.cameraSocket.send('camera', 'getNewPicture')
-          .then(parseData);
+        socket.send('camera', 'getNewPicture')
       }
 
       function getLatestPicture() {
-        return piWebsocket.cameraSocket.send('camera', "getLatestPicture")
-          .then(parseData);
+        socket.send('camera', "getLatestPicture")
       }
 
       function parseData(response) {

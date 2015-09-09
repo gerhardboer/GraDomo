@@ -11,18 +11,19 @@
     var vm = this;
 
     this.reloadGUI = getGUI;
+    $scope.$on('light-gui', showGUI);
+    $scope.$on('light-update', showNewState);
 
-    $scope.$on('light-websocketOpened', websocketOpened);
-    $scope.$on('light-websocketClosed', websocketClosed);
-    $scope.$on('light-websocketError', websocketError);
+    function showNewState(newState) {
+      piToastr('success', vm.device.name + ': ' + newState.state);
+    }
 
     (function init() {
         getGUI();
     })();
 
     function getGUI() {
-      lightService.requestGUI()
-        .then(showGUI)
+      lightService.requestGUI();
     }
 
     function showGUI(gui) {
@@ -30,20 +31,20 @@
       showGUILoaded();
     }
 
-    function websocketOpened(evt, socketEvt) {
-      if(!vm.gui) {
-        getGUI();
-      }
-      piToastr('info', socketEvt.srcElement.url + ' connected');
-    }
-
-    function websocketClosed() {
-      piToastr('info', 'Light socket closed');
-    }
-
-    function websocketError(evt, socketEvt) {
-      piToastr('error', socketEvt.srcElement.url + ' error');
-    }
+    //function websocketOpened(evt, socketEvt) {
+    //  if(!vm.gui) {
+    //    getGUI();
+    //  }
+    //  piToastr('info', socketEvt.srcElement.url + ' connected');
+    //}
+    //
+    //function websocketClosed() {
+    //  piToastr('info', 'Light socket closed');
+    //}
+    //
+    //function websocketError(evt, socketEvt) {
+    //  piToastr('error', socketEvt.srcElement.url + ' error');
+    //}
 
     function showGUILoaded() {
       piToastr('info', 'GUI loaded');
