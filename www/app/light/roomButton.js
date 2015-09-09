@@ -2,7 +2,7 @@
   angular.module('GraDomo')
     .directive('roomButton', RoomButton);
 
-  RoomButton.$inject = ['$timeout', 'lightService'];
+  RoomButton.$inject = ['lightService'];
 
   function RoomButton(lightService) {
     return {
@@ -44,12 +44,12 @@
       };
 
       function turnOnRoom() {
-        lightService.turnOnDevices(vm.devices, vm.room)
+        lightService.turnOnDevices(vm.devices)
 
       }
 
       function turnOffRoom() {
-        lightService.turnOffDevices(vm.devices, vm.room)
+        lightService.turnOffDevices(vm.devices)
       }
 
       $scope.$on('light-button-update', setNewState);

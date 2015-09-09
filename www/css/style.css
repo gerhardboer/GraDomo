@@ -25,9 +25,9 @@ ion-content {
 }
 
 button.isOn.button-balanced {
-  box-shadow: 0 0 15px #28a54c
+  box-shadow: 0 0 10px 2px #28a54c
 }
 
 button.isOff.button-assertive {
-  box-shadow: 0 0 15px #e42012;
+  box-shadow: 0 0 10px 2px #e42012;
 }

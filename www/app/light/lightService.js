@@ -5,9 +5,9 @@
   angular.module('GraDomo')
     .service('lightService', LightService);
 
-  LightService.$inject = ['$q', 'piWebsocket', '$rootScope'];
+  LightService.$inject = ['$q', '$timeout', 'piWebsocket', '$rootScope'];
 
-  function LightService($q, piWebsocket, $rootScope) {
+  function LightService($q, $timeout, piWebsocket, $rootScope) {
     this.requestGUI = requestGUI;
     this.sendOn = sendOn;
     this.sendOff = sendOff;
@@ -63,15 +63,23 @@
       send(message);
     }
 
-    function turnOnDevices(devices, room) {
-      Object.keys(devices).forEach(function(device) {
-        sendOn(device);
-      });
+    function turnOnDevices(devices) {
+      sendWithWait(devices, sendOn)
     }
 
-    function turnOffDevices(devices, room) {
+    function turnOffDevices(devices) {
+      sendWithWait(devices, sendOff)
+    }
+
+    function sendWithWait(devices, fn) {
+      var stepping = 0;
+
       Object.keys(devices).forEach(function(device) {
-        sendOff(device);
+        $timeout(function() {
+          fn(device);
+        }, stepping);
+
+        stepping += 500;
       });
     }
 
