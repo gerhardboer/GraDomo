@@ -5,55 +5,62 @@
   angular.module('GraDomo')
     .factory('piWebsocket', PiWebsocket);
 
-  PiWebsocket.$inject = ['$q', '$rootScope', 'LIGHT_URL', 'CAMERA_URL', 'VIDEO_URL'];
+  PiWebsocket.$inject = ['LIGHT_URL', 'CAMERA_URL', 'VIDEO_URL'];
 
-  function PiWebsocket($q, $rootScope, LIGHT_URL, CAMERA_URL, VIDEO_URL) {
+  function PiWebsocket(LIGHT_URL, CAMERA_URL, VIDEO_URL) {
     var sockets = {};
     return function (type, handler, onOpenPromise) {
+
       if (type === 'picture') {
-        if(!sockets.camera) {
-          sockets.camera = new Socket(CAMERA_URL, handler, onOpenPromise);
-        }
-        return sockets.camera;
+        return buildSocket(type, CAMERA_URL, handler, onOpenPromise);
+
       }
       if (type === 'light') {
-        if(!sockets.light) {
-          sockets.light = new Socket(LIGHT_URL, handler, onOpenPromise);
-        }
-        return sockets.light;
+        return buildSocket(type, LIGHT_URL, handler, onOpenPromise);
       }
 
       if (type === 'video') {
-        if(!sockets.video) {
-          sockets.video = new Socket(VIDEO_URL, handler, onOpenPromise);
-        }
-        return sockets.video;
+        return buildSocket(type, VIDEO_URL, handler, onOpenPromise);
       }
     };
+
+    function buildSocket(type, url, handler, onOpenPromise) {
+      if(!sockets[type]) {
+        sockets[type] = new Socket(url, onOpenPromise);
+      } else {
+        //don't like it, but meh
+        onOpenPromise.resolve({});
+      }
+
+      sockets[type].setHandler(handler);
+      return sockets[type];
+    }
   }
 
-  function Socket(url, handler, onOpenPromise) {
-    this.oWebsocket = new WebSocket(url);
+  function Socket(url, onOpenPromise) {
+    var oWebsocket = new WebSocket(url);
 
-    this.oWebsocket.onmessage = handler;
-
-    this.oWebsocket.onopen = function (evt) {
+    oWebsocket.onopen = function (evt) {
       onOpenPromise.resolve({
         data: evt
       });
     };
 
-    this.oWebsocket.onclose = function (evt) {
+    oWebsocket.onclose = function (evt) {
       handler({closed: evt});
     };
 
-    this.oWebsocket.onerror = function (evt) {
+    oWebsocket.onerror = function (evt) {
       handler({error: evt});
     };
-  }
 
-  Socket.prototype.send = function (key, message) {
-    this.oWebsocket.send(message);
-  };
+    this.send = function(message) {
+      oWebsocket.send(message);
+    };
+
+    this.setHandler = function(handler) {
+      oWebsocket.onmessage = handler;
+    };
+  }
 
 })(angular);

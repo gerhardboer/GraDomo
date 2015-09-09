@@ -10,7 +10,6 @@
   function LightView($scope, lightService, piToastr) {
     var vm = this;
 
-    this.reloadGUI = getGUI;
     $scope.$on('light-gui', showGUI);
     $scope.$on('light-update', showNewState);
 
@@ -22,9 +21,13 @@
     (function init() {
       lightService.openSocket()
         .then(getGUI);
+
+      piToastr('info', 'Opening socket')
     })();
 
     function getGUI() {
+      piToastr('info', 'Getting UI');
+
       lightService.requestGUI();
     }
 
@@ -34,7 +37,7 @@
     }
 
     function showGUILoaded() {
-      piToastr('info', 'GUI loaded');
+      piToastr('info', 'UI loaded');
     }
   }
 

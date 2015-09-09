@@ -12,20 +12,19 @@
 
     vm.getNewPicture = getNewPicture;
 
-    $scope.$on('camera-websocketOpened', websocketOpened);
-    $scope.$on('camera-websocketClosed', websocketClosed);
-    $scope.$on('camera-websocketError', websocketError);
-
-    $scope.$on('camera-update', showPicture);
-
+    $scope.$on('picture-update', showPicture);
 
     (function init() {
-      getLatestPicture();
+      pictureService.openSocket()
+        .then(getLatestPicture);
+
+      piToastr('info', 'Opening socket')
     })();
 
     function getLatestPicture() {
       pictureService.getLatestPicture();
-      piToastr('info', 'retrieving latest picture')
+
+      piToastr('info', 'Retrieving latest picture')
     }
 
     function getNewPicture() {
@@ -34,28 +33,13 @@
 
       pictureService.getNewPicture();
 
-      piToastr('info', 'retrieving new picture')
+      piToastr('info', 'Retrieving new picture')
     }
 
-    function showPicture(picture) {
+    function showPicture(evt, picture) {
       vm.latestImage = picture;
 
       piToastr('success', 'Image loaded');
-    }
-
-    function websocketOpened(evt, socketEvt) {
-      if (!vm.latestImage) {
-        getLatestPicture();
-      }
-      piToastr('info', socketEvt.srcElement.url + ' connected');
-    }
-
-    function websocketClosed() {
-      piToastr('info', 'Camera socket closed');
-    }
-
-    function websocketError(evt) {
-      piToastr('error', 'Camera socket error');
     }
 
   }

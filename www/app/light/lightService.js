@@ -60,7 +60,7 @@
         "action": "request config"
       };
 
-      send('gui', message);
+      send(message);
     }
 
     function turnOnDevices(devices, room) {
@@ -91,11 +91,11 @@
           "state": newState
         }
       };
-      send(device, message);
+      send(message);
     }
 
-    function send(key, message) {
-      return lightSocket.send(key, angular.toJson(message));
+    function send(message) {
+      return lightSocket.send(angular.toJson(message));
     }
 
   }
