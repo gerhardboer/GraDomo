@@ -14,8 +14,9 @@
     $scope.$on('light-update', showNewState);
 
     function showNewState(evt, newState) {
-      piToastr('success', newState.device + ': ' + newState.state);
       $scope.$broadcast('light-button-update', newState);
+
+      piToastr('success', newState.device + ': ' + newState.state);
     }
 
     (function init() {
@@ -26,17 +27,15 @@
     })();
 
     function getGUI() {
+      lightService.requestGUI();
+
       piToastr('info', 'Getting UI');
 
-      lightService.requestGUI();
     }
 
     function showGUI(evt, gui) {
       vm.gui = transformGUI(gui);
-      showGUILoaded();
-    }
 
-    function showGUILoaded() {
       piToastr('info', 'UI loaded');
     }
   }
