@@ -2,9 +2,9 @@
   angular.module('GraDomo')
     .directive('lightButton', LightButton);
 
-  LightButton.$inject = ['$timeout', 'lightService', 'piToastr'];
+  LightButton.$inject = ['$timeout', 'lightService'];
 
-  function LightButton($timeout, lightService, piToastr) {
+  function LightButton($timeout, lightService) {
     return {
       restrict: 'EA',
       replace: true,
@@ -21,7 +21,7 @@
       '</button>'
     };
 
-    function LightButtonController() {
+    function LightButtonController($scope) {
       var vm = this;
 
       vm.executing = false;
@@ -48,10 +48,13 @@
         }
       };
 
-      function showNewState(newState) {
-        vm.device.state = newState.state;
-        piToastr('success', vm.device.name + ': ' + newState.state);
-        vm.executing = false;
+      $scope.$on('light-button-update', setNewState);
+
+      function setNewState(evt, newState) {
+        if(newState.device == vm.device.id) {
+          vm.device.state = newState.state;
+          vm.executing = false;
+        }
       }
     }
   }

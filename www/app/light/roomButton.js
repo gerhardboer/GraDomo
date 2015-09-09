@@ -2,9 +2,9 @@
   angular.module('GraDomo')
     .directive('roomButton', RoomButton);
 
-  RoomButton.$inject = ['$timeout', 'lightService', 'piToastr'];
+  RoomButton.$inject = ['$timeout', 'lightService'];
 
-  function RoomButton($timeout, lightService, piToastr) {
+  function RoomButton(lightService) {
     return {
       restrict: 'EA',
       replace: true,
@@ -16,13 +16,13 @@
       controller: RoomButtonController,
       controllerAs: 'vm',
       bindToController: true,
-      template: '<button class="button button-small" ng-class="{\'button-balanced\': vm.isOn, \'button-assertive\': vm.isOff}" ng-click="vm.execute()"> '+
-      '<span ng-if="!vm.executing">{{vm.type}}</span> '+
-      '<ion-spinner ng-if="vm.executing" icon="android" class="loadingRoom-padding"></ion-spinner> '+
-    '</button>'
+      template: '<button class="button button-small" ng-class="{\'button-balanced\': vm.isOn, \'button-assertive\': vm.isOff}" ng-click="vm.execute()"> ' +
+      '<span ng-if="!vm.executing">{{vm.type}}</span> ' +
+      '<ion-spinner ng-if="vm.executing" icon="android" class="loadingRoom-padding"></ion-spinner> ' +
+      '</button>'
     };
 
-    function RoomButtonController() {
+    function RoomButtonController($scope) {
       var vm = this;
 
       vm.executing = false;
@@ -50,15 +50,11 @@
 
       function turnOffRoom() {
         lightService.turnOffDevices(vm.devices, vm.room)
-
       }
 
-      function showNewState(newState) {
-        Object.keys(vm.devices).map(function(deviceKey) {
-          vm.devices[deviceKey].state = newState.state;
-        });
+      $scope.$on('light-button-update', setNewState);
 
-        piToastr('success', vm.room + ': ' + newState.state);
+      function setNewState(evt, newState) {
         vm.executing = false;
       }
     }

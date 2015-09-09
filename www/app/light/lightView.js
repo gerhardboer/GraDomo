@@ -14,37 +14,24 @@
     $scope.$on('light-gui', showGUI);
     $scope.$on('light-update', showNewState);
 
-    function showNewState(newState) {
-      piToastr('success', vm.device.name + ': ' + newState.state);
+    function showNewState(evt, newState) {
+      piToastr('success', newState.device + ': ' + newState.state);
+      $scope.$broadcast('light-button-update', newState);
     }
 
     (function init() {
-        getGUI();
+      lightService.openSocket()
+        .then(getGUI);
     })();
 
     function getGUI() {
       lightService.requestGUI();
     }
 
-    function showGUI(gui) {
+    function showGUI(evt, gui) {
       vm.gui = transformGUI(gui);
       showGUILoaded();
     }
-
-    //function websocketOpened(evt, socketEvt) {
-    //  if(!vm.gui) {
-    //    getGUI();
-    //  }
-    //  piToastr('info', socketEvt.srcElement.url + ' connected');
-    //}
-    //
-    //function websocketClosed() {
-    //  piToastr('info', 'Light socket closed');
-    //}
-    //
-    //function websocketError(evt, socketEvt) {
-    //  piToastr('error', socketEvt.srcElement.url + ' error');
-    //}
 
     function showGUILoaded() {
       piToastr('info', 'GUI loaded');

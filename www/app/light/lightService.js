@@ -15,8 +15,17 @@
     this.turnOnDevices = turnOnDevices;
     this.turnOffDevices = turnOffDevices;
 
-    var lightSocket = piWebsocket('light', lightMessageHandler);
-    this.lightSocket = lightSocket;
+    this.openSocket = openSocket;
+
+    var lightSocket;
+
+    function openSocket() {
+      var deferred = $q.defer();
+
+      lightSocket = piWebsocket('light', lightMessageHandler, deferred);
+
+      return deferred.promise;
+    }
 
     function lightMessageHandler(evt) {
       if (evt.data) {
@@ -26,7 +35,7 @@
             $rootScope.$broadcast('light-update', parseResult(response));
           }
         } else if (response.gui) {
-          $rootScope.$broadcast('light-gui', response.gui);
+          $rootScope.$broadcast('light-gui', addDeviceState(response.gui, response.devices));
         }
       }
     }
@@ -55,13 +64,13 @@
     }
 
     function turnOnDevices(devices, room) {
-      devices.forEach(function(device) {
+      Object.keys(devices).forEach(function(device) {
         sendOn(device);
       });
     }
 
     function turnOffDevices(devices, room) {
-      devices.forEach(function(device) {
+      Object.keys(devices).forEach(function(device) {
         sendOff(device);
       });
     }
@@ -88,10 +97,6 @@
     function send(key, message) {
       return lightSocket.send(key, angular.toJson(message));
     }
-
-  }
-
-  LightService.prototype.send = function(key, message) {
 
   }
 })(angular);

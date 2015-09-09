@@ -8,39 +8,39 @@
   PiWebsocket.$inject = ['$q', '$rootScope', 'LIGHT_URL', 'CAMERA_URL', 'VIDEO_URL'];
 
   function PiWebsocket($q, $rootScope, LIGHT_URL, CAMERA_URL, VIDEO_URL) {
-    return function (type, handler) {
+    var sockets = {};
+    return function (type, handler, onOpenPromise) {
       if (type === 'picture') {
-        return initCameraSocket(handler)
+        if(!sockets.camera) {
+          sockets.camera = new Socket(CAMERA_URL, handler, onOpenPromise);
+        }
+        return sockets.camera;
       }
       if (type === 'light') {
-        return initLightSocket(handler);
+        if(!sockets.light) {
+          sockets.light = new Socket(LIGHT_URL, handler, onOpenPromise);
+        }
+        return sockets.light;
       }
 
       if (type === 'video') {
-        return initVideoSocket(handler);
+        if(!sockets.video) {
+          sockets.video = new Socket(VIDEO_URL, handler, onOpenPromise);
+        }
+        return sockets.video;
       }
     };
-
-    function initLightSocket(handler) {
-      return new Socket(LIGHT_URL, handler);
-    }
-
-    function initCameraSocket(handler) {
-      return new Socket(CAMERA_URL, handler);
-    }
-
-    function initVideoSocket(handler) {
-      return new Socket(VIDEO_URL, handler);
-    }
   }
 
-  function Socket(url, handler) {
+  function Socket(url, handler, onOpenPromise) {
     this.oWebsocket = new WebSocket(url);
 
     this.oWebsocket.onmessage = handler;
 
     this.oWebsocket.onopen = function (evt) {
-      handler({open: evt});
+      onOpenPromise.resolve({
+        data: evt
+      });
     };
 
     this.oWebsocket.onclose = function (evt) {
