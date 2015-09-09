@@ -31,6 +31,14 @@
       }
     }
 
+    function addDeviceState(gui, devices) {
+      Object.keys(gui).map(function (guiKey) {
+        gui[guiKey].state = devices[guiKey].state;
+      });
+
+      return gui;
+    }
+
     function parseResult(response) {
       return {
         device: response.devices[0],

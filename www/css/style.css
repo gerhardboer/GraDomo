@@ -23,3 +23,11 @@ ion-content {
 .action-menu a {
   float: right;
 }
+
+button.isOn.button-balanced {
+  box-shadow: 0 0 15px #28a54c
+}
+
+button.isOff.button-assertive {
+  box-shadow: 0 0 15px #e42012;
+}

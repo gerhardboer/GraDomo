@@ -15,8 +15,8 @@
       controller: LightButtonController,
       controllerAs: 'vm',
       bindToController: true,
-      template: '<button class="button" ng-class="{\'button-balanced\': vm.isOn, \'button-assertive\': vm.isOff}" ng-click="vm.execute()"> ' +
-      '<i class="icon" ng-class="{\'ion-flash\': vm.isOn, \'ion-flash-off\': vm.isOff}" ng-if="!vm.executing"></i> ' +
+      template: '<button class="button" ng-class="{\'isOff\': vm.isOff(), \'isOn\': vm.isOn(), \'button-balanced\': vm.isTypeOn, \'button-assertive\': vm.isTypeOff}" ng-click="vm.execute()"> ' +
+      '<i class="icon" ng-class="{\'ion-flash\': vm.isTypeOn, \'ion-flash-off\': vm.isTypeOff}" ng-if="!vm.executing"></i> ' +
       '<ion-spinner icon="android" class="loading-padding-top" ng-if="vm.executing"></ion-spinner> ' +
       '</button>'
     };
@@ -26,20 +26,33 @@
 
       vm.executing = false;
 
-      vm.isOn = vm.type == 'on';
-      vm.isOff = vm.type == 'off';
+      vm.isOn = function() {
+        return vm.device.state === 'on' && vm.type === 'on';
+      };
+
+      vm.isOff = function() {
+        return vm.device.state === 'off' && vm.type === 'off';
+      };
+
+      vm.isTypeOn = vm.type == 'on';
+      vm.isTypeOff = vm.type == 'off';
 
       vm.execute = function () {
         vm.executing = true;
-        if (vm.isOn) {
+        if (vm.isTypeOn) {
           lightService.sendOn(vm.device.id)
         }
 
-        if (vm.isOff) {
+        if (vm.isTypeOff) {
           lightService.sendOff(vm.device.id)
         }
       };
 
+      function showNewState(newState) {
+        vm.device.state = newState.state;
+        piToastr('success', vm.device.name + ': ' + newState.state);
+        vm.executing = false;
+      }
     }
   }
 })(angular);

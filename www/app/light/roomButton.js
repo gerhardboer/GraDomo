@@ -52,6 +52,15 @@
         lightService.turnOffDevices(vm.devices, vm.room)
 
       }
+
+      function showNewState(newState) {
+        Object.keys(vm.devices).map(function(deviceKey) {
+          vm.devices[deviceKey].state = newState.state;
+        });
+
+        piToastr('success', vm.room + ': ' + newState.state);
+        vm.executing = false;
+      }
     }
   }
 })(angular);
