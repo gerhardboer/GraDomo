@@ -22,7 +22,8 @@
 
       function responseHandler(evt) {
         if (evt.data) {
-          $rootScope.$broadcast('picture-update', parseData(evt.data));
+          var response = angular.fromJson(evt.data);
+          $rootScope.$broadcast('picture-update', parseData(response));
         }
       }
 
@@ -34,15 +35,11 @@
         pictureSocket.send("getLatestPicture")
       }
 
-      function parseData(imageName) {
+      function parseData(response) {
         return {
-          url: IMAGE_URL + imageName,
-          date: getDateFromImage(imageName)
+          url: IMAGE_URL + response.file + '?' + Date.now(),
+          date: response.date
         }
-      }
-
-      function getDateFromImage(image) {
-        return image.substring(image.indexOf('-')+1, image.indexOf('.jpg'));
       }
     }
 

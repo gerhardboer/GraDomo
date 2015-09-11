@@ -51,9 +51,9 @@
     });
   function getHostBasedOnPlatform() {
     var host = '192.168.0.18';
-    if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
-      host = 'localhost';
-    }
+    //if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
+    //  host = 'localhost';
+    //}
 
     return host;
   }

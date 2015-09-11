@@ -8,25 +8,25 @@
       </div>
 
       <div class="item">
-        <h2>Latest image</h2>
-        <p>{{vm.latestImage.date | date : 'dd-MM-yyyy HH:mm'}}</p>
+        <h2>Timelapse</h2>
+        <p>{{vm.latestImage.date | date : 'dd-MM-yyyy HH:mm:ss'}}</p>
         <p>Url: {{vm.latestImage.url}}</p>
       </div>
     </div>
 
-    <div class="list card" ng-repeat="image in vm.history">
+    <!--<div class="list card" ng-repeat="image in vm.history">-->
 
-      <div class="item item-image">
-        <img ng-src="{{image.url}}">
-      </div>
+      <!--<div class="item item-image">-->
+        <!--<img ng-src="{{image.url}}">-->
+      <!--</div>-->
 
-      <div class="item">
-        <h2>{{image.date | date : 'dd-MM-yyyy HH:mm'}}</h2>
-      </div>
-    </div>
+      <!--<div class="item">-->
+        <!--<h2>{{image.date | date : 'dd-MM-yyyy HH:mm:ss'}}</h2>-->
+      <!--</div>-->
+    <!--</div>-->
   </ion-content>
 
   <div class="action-menu padding">
-    <a class="button button-icon icon ion-refresh pull-right" ng-click="vm.getNewPicture()"></a>
+    <!--<a class="button button-icon icon ion-refresh pull-right" ng-click="vm.getNewPicture()"></a>-->
   </div>
 </ion-view>

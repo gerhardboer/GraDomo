@@ -2,9 +2,9 @@
   angular.module('GraDomo')
     .controller('pictureView', ctrl);
 
-  ctrl.$inject = ['$scope', 'pictureService', 'piToastr'];
+  ctrl.$inject = ['$scope', '$timeout', 'pictureService', 'piToastr'];
 
-  function ctrl($scope, pictureService, piToastr) {
+  function ctrl($scope, $timeout, pictureService, piToastr) {
     var vm = this;
 
     vm.history = [];
@@ -29,7 +29,6 @@
 
     function getNewPicture() {
       vm.history.push(angular.copy(vm.latestImage));
-      vm.latestImage = null;
 
       pictureService.getNewPicture();
 
@@ -37,7 +36,12 @@
     }
 
     function showPicture(evt, picture) {
-      vm.latestImage = picture;
+      vm.latestImage = null;
+
+      //allow the angular cycle one tick
+      $timeout(function() {
+        vm.latestImage = picture;
+      }, 0);
 
       piToastr('success', 'Image loaded');
     }

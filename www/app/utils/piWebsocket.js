@@ -25,20 +25,21 @@
     };
 
     function buildSocket(type, url, handler, onOpenPromise) {
-      if(!sockets[type]) {
-        sockets[type] = new Socket(url, onOpenPromise);
-      } else {
-        //don't like it, but meh
+      if(sockets[type]) {
+        sockets[type].setHandler(handler);
         onOpenPromise.resolve({});
+      } else {
+        sockets[type] = new Socket(url, handler, onOpenPromise);
       }
 
-      sockets[type].setHandler(handler);
       return sockets[type];
     }
   }
 
-  function Socket(url, onOpenPromise) {
+  function Socket(url, handler, onOpenPromise) {
     var oWebsocket = new WebSocket(url);
+
+    oWebsocket.onmessage = handler;
 
     oWebsocket.onopen = function (evt) {
       onOpenPromise.resolve({
