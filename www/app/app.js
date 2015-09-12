@@ -33,7 +33,7 @@
 
       $urlRouterProvider.otherwise('/');
     })
-    .run(function ($ionicPlatform, $rootScope) {
+    .run(function ($ionicPlatform, $rootScope, piWebsocket, piToastr) {
       $ionicPlatform.ready(function () {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -45,7 +45,8 @@
         }
 
         document.addEventListener("resume", function () {
-          $rootScope.$broadcast('reloadSockets');
+            //piWebsocket('close');
+            //piToastr('info', 'Sockets closed')
         }, false);
       });
     });

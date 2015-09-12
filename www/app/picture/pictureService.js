@@ -12,10 +12,10 @@
 
       var pictureSocket;
 
-      function openSocket() {
+      function openSocket(onClose) {
         var deferred = $q.defer();
 
-        pictureSocket = piWebsocket('picture', responseHandler, deferred);
+        pictureSocket = piWebsocket('picture', responseHandler, deferred, onClose);
 
         return deferred.promise;
       }

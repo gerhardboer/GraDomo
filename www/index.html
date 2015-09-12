@@ -1,60 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-  <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
 
-  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-  <link href="lib/angular-toastr/dist/angular-toastr.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="lib/angular-toastr/dist/angular-toastr.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
 
-  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
-  <link href="css/ionic.app.css" rel="stylesheet">
-  -->
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
 
-  <!-- ionic/angularjs js -->
-  <script src="lib/ionic/js/ionic.bundle.js"></script>
-  <script src="lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
 
-  <!-- cordova script (this will be a 404 during development) -->
-  <script src="cordova.js"></script>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
 
-  <!-- your app's js -->
-  <script src="app/app.js"></script>
+    <!-- your app's js -->
+    <script src="app/app.js"></script>
 
-  <script src="app/utils/piToastr.js"></script>
+    <script src="app/utils/piToastr.js"></script>
 
-  <script src="app/light/lightView.js"></script>
-  <script src="app/light/lightService.js"></script>
-  <script src="app/light/lightButton.js"></script>
-  <script src="app/light/roomButton.js"></script>
+    <script src="app/light/lightView.js"></script>
+    <script src="app/light/lightService.js"></script>
+    <script src="app/light/lightButton.js"></script>
+    <script src="app/light/roomButton.js"></script>
 
-  <script src="app/picture/pictureView.js"></script>
-  <script src="app/picture/pictureService.js"></script>
+    <script src="app/picture/pictureView.js"></script>
+    <script src="app/picture/pictureService.js"></script>
 
-  <script src="app/utils/piWebsocket.js"></script>
+    <script src="app/utils/piWebsocket.js"></script>
 </head>
 <body ng-app="GraDomo">
 
-  <ion-nav-bar></ion-nav-bar>
+<ion-nav-bar></ion-nav-bar>
 
-  <ion-nav-view></ion-nav-view>
+<ion-nav-view></ion-nav-view>
 
-  <div class="bar bar-footer bar-light">
+
+<div class="bar bar-footer bar-light">
     <div class="tabs tabs-icon-only">
-      <a class="tab-item" href="#/">
-        <i class="icon ion-ios-lightbulb-outline"></i>
-      </a>
-      <a class="tab-item" href="#/picture">
-        <i class="icon ion-ios-camera-outline"></i>
-      </a>
-      <!--<a class="tab-item" href="#/video">-->
+        <a class="tab-item" href="#/">
+            <i class="icon ion-ios-lightbulb-outline"></i>
+        </a>
+        <a class="tab-item" href="#/picture">
+            <i class="icon ion-ios-camera-outline"></i>
+        </a>
+        <!--<a class="tab-item" href="#/video">-->
         <!--<i class="icon ion-ios-eye-outline"></i>-->
-      <!--</a>-->
+        <!--</a>-->
     </div>
-  </div>
+</div>
 
 </body>
 </html>
