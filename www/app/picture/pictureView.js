@@ -14,6 +14,7 @@
         vm.getNewPicture = getNewPicture;
 
         $scope.$on('$ionicView.beforeEnter', beforeEnter);
+        $scope.$on('$ionicView.beforeLeave', beforeLeave);
         $scope.$on('picture-update', showPicture);
 
         function init() {
@@ -25,8 +26,14 @@
         }
 
         function beforeEnter() {
-            piToastr('info', '$ionicView.beforeEnter');
+            piToastr('info', 'picture - $ionicView.beforeEnter');
             init();
+        }
+
+        function beforeLeave() {
+            piToastr('info', 'picture - $ionicView.beforeLeave');
+
+            pictureService.closeSocket();
         }
 
         function onClose(evt) {

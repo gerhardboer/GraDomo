@@ -35,7 +35,7 @@
 
             function onClose(URL) {
                 delete sockets[URL];
-                onCloseCb && onCloseCb({reason: 'Socket closed'});
+                onCloseCb && onCloseCb({reason: type + ' socket closed'});
             }
         };
 
@@ -77,7 +77,7 @@
         };
 
         oWebsocket.onclose = function (evt) {
-          onCloseFn && onCloseFn(URL, evt);
+          onCloseFn && onCloseFn(url, evt);
         };
 
         oWebsocket.onerror = function (evt) {
@@ -97,6 +97,10 @@
 
         this.close = function() {
             oWebsocket.close();
+        };
+
+        this.softClose = function (){
+            onCloseFn({});
         };
 
         this.setHandler = function (handler) {

@@ -7,6 +7,7 @@
     function service($q, piWebsocket, $rootScope, IMAGE_URL) {
 
         this.openSocket = openSocket;
+        this.closeSocket = closeSocket;
         this.getNewPicture = getNewPicture;
         this.getLatestPicture = getLatestPicture;
 
@@ -18,6 +19,10 @@
             pictureSocket = piWebsocket('picture', responseHandler, deferred, onClose);
 
             return deferred.promise;
+        }
+
+        function closeSocket() {
+            pictureSocket.close();
         }
 
         function responseHandler(evt) {

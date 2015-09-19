@@ -13,6 +13,10 @@
         $scope.$on('light-gui', showGUI);
         $scope.$on('light-update', showNewState);
 
+        $scope.$on('$ionicView.beforeEnter', beforeEnter);
+        $scope.$on('$ionicView.beforeLeave', beforeLeave);
+
+
         function showNewState(evt, newState) {
             $scope.$broadcast('light-button-update', newState);
 
@@ -20,12 +24,26 @@
         }
 
         function init() {
-            lightService.openSocket()
+            lightService.openSocket(onClose)
                 .then(getGUI);
 
             piToastr('info', 'Opening light socket')
         }
-        init();
+
+        function onClose(evt) {
+            piToastr('info', evt.reason)
+        }
+
+        function beforeEnter() {
+            piToastr('info', 'light - $ionicView.beforeEnter');
+            init();
+        }
+
+        function beforeLeave() {
+            piToastr('info', 'light - $ionicView.beforeLeave');
+
+            lightService.closeSocket();
+        }
 
 
         function getGUI() {

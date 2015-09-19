@@ -14,9 +14,11 @@
         .value('IMAGE_URL', 'http://' + host + ':' + 5003 + '/')
         .config(function (toastrConfig, $stateProvider, $urlRouterProvider) {
             angular.extend(toastrConfig, {
-                positionClass: 'toast-top-right'
+                positionClass: 'toast-top-right',
+                maxOpened: 2,
+                newestOnTop: false,
+                preventOpenDuplicates: true
             });
-
 
             $stateProvider
                 .state('light', {
