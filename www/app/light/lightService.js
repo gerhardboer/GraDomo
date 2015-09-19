@@ -72,14 +72,14 @@
     }
 
     function sendWithWait(devices, fn) {
-      var stepping = 0;
+      var step = 0;
 
       Object.keys(devices).forEach(function(device) {
         $timeout(function() {
           fn(device);
-        }, stepping);
+        }, step);
 
-        stepping += 500;
+        step += 500;
       });
     }
 

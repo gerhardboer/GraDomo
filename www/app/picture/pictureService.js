@@ -6,41 +6,45 @@
 
     function service($q, piWebsocket, $rootScope, IMAGE_URL) {
 
-      this.openSocket = openSocket;
-      this.getNewPicture = getNewPicture;
-      this.getLatestPicture = getLatestPicture;
+        this.openSocket = openSocket;
+        this.getNewPicture = getNewPicture;
+        this.getLatestPicture = getLatestPicture;
 
-      var pictureSocket;
+        var pictureSocket;
 
-      function openSocket(onClose) {
-        var deferred = $q.defer();
+        function openSocket(onClose) {
+            var deferred = $q.defer();
 
-        pictureSocket = piWebsocket('picture', responseHandler, deferred, onClose);
+            pictureSocket = piWebsocket('picture', responseHandler, deferred, onClose);
 
-        return deferred.promise;
-      }
-
-      function responseHandler(evt) {
-        if (evt.data) {
-          var response = angular.fromJson(evt.data);
-          $rootScope.$broadcast('picture-update', parseData(response));
+            return deferred.promise;
         }
-      }
 
-      function getNewPicture() {
-        pictureSocket.send('getNewPicture')
-      }
-
-      function getLatestPicture() {
-        pictureSocket.send("getLatestPicture")
-      }
-
-      function parseData(response) {
-        return {
-          url: IMAGE_URL + response.file + '?' + Date.now(),
-          date: response.date
+        function responseHandler(evt) {
+            if (evt.data) {
+                var response = angular.fromJson(evt.data);
+                $rootScope.$broadcast('picture-update', toPictureDAO(response));
+            }
         }
-      }
+
+        function getNewPicture() {
+            if (pictureSocket) {
+                pictureSocket.send('getNewPicture')
+            }
+        }
+
+        function getLatestPicture() {
+            if (pictureSocket) {
+                pictureSocket.send("getLatestPicture")
+            }
+        }
+
+        function toPictureDAO(response) {
+            return {
+                url: IMAGE_URL + response.file + '?' + Date.now(),
+                date: response.date
+            }
+        }
     }
 
 })(angular);

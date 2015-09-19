@@ -51,8 +51,8 @@
 
         function buildSocket(url, socketDef) {
             var handler = socketDef.handler;
-            var onOpenPromise = socketDef.onOpenPromise;
             var onCloseFn = socketDef.onClose;
+            var onOpenPromise = socketDef.onOpenPromise;
 
             if (sockets[url]) {
                 sockets[url].setHandler(handler);
@@ -71,13 +71,13 @@
         oWebsocket.onmessage = handler;
 
         oWebsocket.onopen = function (evt) {
-            onOpenPromise.resolve({
+            onOpenPromise && onOpenPromise.resolve({
                 data: evt
             });
         };
 
         oWebsocket.onclose = function (evt) {
-          onCloseFn(URL, evt);
+          onCloseFn && onCloseFn(URL, evt);
         };
 
         oWebsocket.onerror = function (evt) {

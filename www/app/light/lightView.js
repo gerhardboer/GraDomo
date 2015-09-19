@@ -2,57 +2,64 @@
  * Created by gerhardboer on 27/08/15.
  */
 (function (angular) {
-  angular.module('GraDomo')
-    .controller('LightView', LightView);
+    angular.module('GraDomo')
+        .controller('LightView', LightView);
 
-  LightView.$inject = ['$scope', 'lightService', 'piToastr'];
+    LightView.$inject = ['$scope', 'lightService', 'piToastr'];
 
-  function LightView($scope, lightService, piToastr) {
-    var vm = this;
+    function LightView($scope, lightService, piToastr) {
+        var vm = this;
 
-    $scope.$on('light-gui', showGUI);
-    $scope.$on('light-update', showNewState);
+        $scope.$on('light-gui', showGUI);
+        $scope.$on('light-update', showNewState);
 
-    function showNewState(evt, newState) {
-      $scope.$broadcast('light-button-update', newState);
+        $scope.$on('$ionicView.beforeEnter', beforeEnter);
 
-      piToastr('success', newState.device + ': ' + newState.state);
+        function showNewState(evt, newState) {
+            $scope.$broadcast('light-button-update', newState);
+
+            piToastr('success', newState.device + ': ' + newState.state);
+        }
+
+        function init() {
+            lightService.openSocket()
+                .then(getGUI);
+
+            piToastr('info', 'Opening light socket')
+        }
+
+        function beforeEnter() {
+            piToastr('info', '$ionicView.enter');
+            init();
+        }
+
+        function getGUI() {
+            lightService.requestGUI();
+
+            piToastr('info', 'Getting UI');
+
+        }
+
+        function showGUI(evt, gui) {
+            vm.gui = transformGUI(gui);
+
+            piToastr('info', 'UI loaded');
+        }
     }
 
-    (function init() {
-      lightService.openSocket()
-        .then(getGUI);
+    function transformGUI(gui) {
+        var rooms = {};
 
-      piToastr('info', 'Opening socket')
-    })();
-
-    function getGUI() {
-      lightService.requestGUI();
-
-      piToastr('info', 'Getting UI');
-
-    }
-
-    function showGUI(evt, gui) {
-      vm.gui = transformGUI(gui);
-
-      piToastr('info', 'UI loaded');
-    }
-  }
-
-  function transformGUI(gui) {
-      var rooms = {};
-
-      angular.forEach(gui, function (device, deviceKey) {
-        device.group.forEach(function (room) {
-          if (rooms[room] === undefined) {
-            rooms[room] = {};
-          }
-          device.id = deviceKey;
-          rooms[room][deviceKey] = (device);
+        angular.forEach(gui, function (device, deviceKey) {
+            device.group.forEach(function (room) {
+                if (rooms[room] === undefined) {
+                    rooms[room] = {};
+                }
+                device.id = deviceKey;
+                rooms[room][deviceKey] = (device);
+            });
         });
-      });
 
-    return rooms;
-  }
+        return rooms;
+    }
 })(angular);

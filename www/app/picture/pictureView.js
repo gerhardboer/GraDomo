@@ -10,17 +10,24 @@
         vm.history = [];
         vm.latestImage = null;
 
+        vm.init = init;
         vm.getNewPicture = getNewPicture;
 
+        $scope.$on('$ionicView.beforeEnter', beforeEnter);
         $scope.$on('picture-update', showPicture);
 
-        (function init() {
+        function init() {
             pictureService.openSocket(onClose)
                 .then(getLatestPicture)
                 .catch(showSocketError);
 
-            piToastr('info', 'Opening socket')
-        })();
+            piToastr('info', 'Opening picture socket')
+        }
+
+        function beforeEnter() {
+            piToastr('info', '$ionicView.beforeEnter');
+            init();
+        }
 
         function onClose(evt) {
             piToastr('info', evt.reason)
