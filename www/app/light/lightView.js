@@ -13,8 +13,6 @@
         $scope.$on('light-gui', showGUI);
         $scope.$on('light-update', showNewState);
 
-        $scope.$on('$ionicView.beforeEnter', beforeEnter);
-
         function showNewState(evt, newState) {
             $scope.$broadcast('light-button-update', newState);
 
@@ -27,11 +25,8 @@
 
             piToastr('info', 'Opening light socket')
         }
+        init();
 
-        function beforeEnter() {
-            piToastr('info', '$ionicView.enter');
-            init();
-        }
 
         function getGUI() {
             lightService.requestGUI();

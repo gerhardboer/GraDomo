@@ -31,3 +31,35 @@ button.isOn.button-balanced {
 button.isOff.button-assertive {
   box-shadow: 0 0 10px 2px #e42012;
 }
+
+/* Container box to set the sides relative to */
+.my-toast > .title-right {
+    /*width: 30%;*/
+    /*text-align: center;*/
+    /*margin: 0 auto;*/
+    height: 100%;
+
+    -webkit-transition: -webkit-transform .33s;
+    transition: transform .33s; /* Animate the transform properties */
+
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d; /* <-NB */
+}
+
+/* Position the faces */
+.my-toast. ready {
+    -webkit-transform: translateZ(50px);
+    transform: translateZ(50px);
+}
+
+.my-toast .showing {
+    -webkit-transform: rotateX(-90deg) translateZ(-50px);
+    transform: rotateX(-90deg) translateZ(-50px);
+}
+
+/* Rotate the cube */
+.my-toast > .title-right:hover {
+    -webkit-transform: rotateX(89deg);
+    transform: rotateX(89deg); /* Text bleed at 90º */
+}
+
