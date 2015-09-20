@@ -5,9 +5,9 @@
     angular.module('GraDomo')
         .factory('piWebsocket', PiWebsocket);
 
-    PiWebsocket.$inject = ['LIGHT_URL', 'CAMERA_URL', 'VIDEO_URL'];
+    PiWebsocket.$inject = ['urlService'];
 
-    function PiWebsocket(LIGHT_URL, CAMERA_URL, VIDEO_URL) {
+    function PiWebsocket(urlService) {
         var sockets = {};
         return function (type, handler, onOpenPromise, onCloseCb) {
             var socketDef = {
@@ -21,15 +21,15 @@
             }
 
             if (type === 'picture') {
-                return buildSocket(CAMERA_URL, socketDef);
+                return buildSocket(urlService.getCameraUrl(), socketDef);
             }
 
             if (type === 'light') {
-                return buildSocket(LIGHT_URL, socketDef);
+                return buildSocket(urlService.getLightUrl(), socketDef);
             }
 
             if (type === 'video') {
-                return buildSocket(VIDEO_URL, socketDef);
+                return buildSocket(urlService.getVideoUrl(), socketDef);
             }
 
 

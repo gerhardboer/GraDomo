@@ -4,20 +4,14 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 (function () {
-    var host = getHostBasedOnPlatform();
-
 
     angular.module('GraDomo', ['ionic', 'toastr'])
-        .value('LIGHT_URL', 'ws://' + host + ':' + 5001 + '/websocket')
-        .value('CAMERA_URL', 'ws://' + host + ':' + 5002 + '/')
-        .value('VIDEO_URL', 'ws://' + host + ':' + 5004 + '/')
-        .value('IMAGE_URL', 'http://' + host + ':' + 5003 + '/')
         .config(function (toastrConfig, $stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             configToastr(toastrConfig);
             configNavigation($stateProvider, $urlRouterProvider);
             configIonic($ionicConfigProvider);
         })
-        .run(function ($ionicPlatform) {
+        .run(function ($ionicPlatform, urlService) {
             $ionicPlatform.ready(function () {
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // for form inputs)
@@ -26,6 +20,18 @@
                 }
                 if (window.StatusBar) {
                     StatusBar.styleDefault();
+                }
+
+                if(window.plugins && window.plugins.WifiAdmin) {
+                    window.plugins.WifiAdmin.getWifiInfo(wifiInfoSuccess, wifiInfoFailed);
+                }
+
+                function wifiInfoSuccess(data) {
+                    urlService.storeWifiInfo(data);
+                }
+
+                function wifiInfoFailed() {
+
                 }
             });
         });
@@ -72,21 +78,7 @@
 
     function configIonic($ionicConfigProvider) {
         $ionicConfigProvider.tabs.style('stable');
-
         $ionicConfigProvider.tabs.position('bottom');
     }
 
-    function getHostBasedOnPlatform() {
-        var host = '192.168.0.18';
-        //if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
-        //  host = 'localhost';
-        //}
-
-        return host;
-    }
-
-    function isOnHomeWifi() {
-        return window.Connection &&
-            navigator.connection.type === Connection.WIFI
-    }
 })(angular);
