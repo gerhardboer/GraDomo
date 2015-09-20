@@ -2,20 +2,44 @@
     angular.module('GraDomo')
         .service('videoService', service);
 
-    service.$inject = ['piWebsocket'];
+    service.$inject = ['$q', '$rootScope', 'piWebsocket'];
 
-    function service(piWebsocket) {
+    function service($q, $rootScope, piWebsocket) {
 
-      this.getVideoStream = getVideoStream;
+        var videoSocket;
 
-      function getVideoStream() {
-        return piWebsocket.video.send('getVideoStream')
-          .then(parseData);
-      }
+        this.openSocket = openSocket;
+        this.closeSocket = closeSocket;
+        this.getVideoStream = getVideoStream;
 
-      function parseData(result) {
-        return result
-      }
+        function openSocket(onClose) {
+            var deferred = $q.defer();
+
+            videoSocket = piWebsocket('video', responseHandler, deferred, onClose);
+
+            return deferred.promise;
+        }
+
+        function closeSocket() {
+            if (videoSocket) {
+                videoSocket.close();
+            }
+        }
+
+        function responseHandler(evt) {
+            if (evt.data) {
+                var response = angular.fromJson(evt.data);
+                $rootScope.$broadcast('video-update', parseData(response));
+            }
+        }
+
+        function getVideoStream() {
+            videoSocket.send('start');
+        }
+
+        function parseData(result) {
+            return result;
+        }
     }
 
 })(angular);

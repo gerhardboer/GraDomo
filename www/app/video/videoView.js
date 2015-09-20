@@ -1,23 +1,44 @@
 (function (angular) {
-  angular.module('GraDomo')
-    .controller('videoView', ctrl);
+    angular.module('GraDomo')
+        .controller('videoView', ctrl);
 
-  ctrl.$inject = ['videoService'];
+    ctrl.$inject = ['$scope', 'videoService'];
 
-  function ctrl(videoService) {
-    var vm = this;
+    function ctrl($scope, videoService) {
+        var vm = this;
 
-    vm.streamUrl = '';
-    vm.getStream = getStream;
+        vm.streamUrl = '';
+        vm.getStream = getStream;
 
-    function getStream() {
-      videoService.getStream()
-        .then(showStream);
+        $scope.$on('video-update', handleVideoUpdate);
+        $scope.$on('$ionicView.beforeEnter', beforeEnter);
+        $scope.$on('$ionicView.beforeLeave', beforeLeave);
+
+        function handleVideoUpdate(evt, data) {
+            vm.streamUrl = data.streamUrl;
+        }
+
+        function init() {
+            videoService.openSocket(onClose)
+                .then(getStream);
+        }
+
+        function onClose(evt) {
+
+        }
+
+        function beforeEnter() {
+            init();
+        }
+
+        function beforeLeave() {
+
+            videoService.closeSocket();
+        }
+
+        function getStream() {
+            videoService.getVideoStream()
+        }
+
     }
-
-    function showStream(streamUrl) {
-      vm.streamUrl = streamUrl;
-    }
-
-  }
 })(angular);

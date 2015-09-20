@@ -1,39 +1,61 @@
+/*/!* ----------- Non-Retina Screens ----------- *!/*/
+/*@media screen*/
+/*and (min-device-width: 1200px)*/
+/*and (max-device-width: 1600px)*/
+/*and (-webkit-min-device-pixel-ratio: 1) {*/
+    /*.view-container, .nav-bar-container {*/
+        /*max-width: 600px;*/
+    /*}*/
+/*}*/
+
+/*/!* ----------- Retina Screens ----------- *!/*/
+/*@media screen*/
+/*and (min-device-width: 1200px)*/
+/*and (max-device-width: 1600px)*/
+/*and (-webkit-min-device-pixel-ratio: 2)*/
+/*and (min-resolution: 192dpi) {*/
+    /*.view-container, .nav-bar-container {*/
+        /*max-width: 600px;*/
+    /*}*/
+/*}*/
+
 .item-divider p {
-  font-size: 18px;
+    font-size: 18px;
 }
 
 ion-content {
-  background-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .loading-padding-top > svg {
-  padding-top: 10px !important;
+    padding-top: 10px !important;
 }
 
 .loadingRoom-padding > svg {
-  padding-top: 7px;
-  padding-right: 10px;
+    padding-top: 7px;
+    padding-right: 10px;
 }
 
 .action-menu {
-  position: absolute;
-  bottom: 45px;
-  right: 0;
+    position: absolute;
+    bottom: 45px;
+    right: 0;
 }
+
 .action-menu a {
-  float: right;
+    float: right;
 }
 
 button.isOn.button-balanced {
-  box-shadow: 0 0 10px 2px #28a54c
+    box-shadow: 0 0 10px 2px #28a54c
 }
 
 button.isOff.button-assertive {
-  box-shadow: 0 0 10px 2px #e42012;
+    box-shadow: 0 0 10px 2px #e42012;
 }
 
 .img-flip-correction {
-    -webkit-transform: scale(-1,-1);
+    -webkit-transform: scale(-1, -1);
 }
 
 .videoView .button-small i {
