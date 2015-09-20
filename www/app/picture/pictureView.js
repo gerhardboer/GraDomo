@@ -28,7 +28,7 @@
 
         function beforeEnter() {
             piToastr('info', 'picture - $ionicView.beforeEnter');
-            init();
+            //init();
         }
 
         function beforeLeave() {

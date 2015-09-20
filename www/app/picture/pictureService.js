@@ -22,7 +22,9 @@
         }
 
         function closeSocket() {
-            pictureSocket.close();
+            if (pictureSocket) {
+                pictureSocket.close();
+            }
         }
 
         function responseHandler(evt) {

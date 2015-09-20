@@ -29,8 +29,10 @@
         }
 
         function closeSocket() {
-            //close it soft here, since piLight does not send closed event?
-            lightSocket.softClose();
+            if (lightSocket) {
+                //close it soft here, since piLight does not send closed event?
+                lightSocket.softClose();
+            }
         }
 
         function lightMessageHandler(evt) {
