@@ -11,6 +11,7 @@
         var vm = this;
 
         vm.init = init;
+        vm.getIconByDevice = getIconByDevice;
 
         $scope.$on('light-gui', showGUI);
         $scope.$on('light-update', showNewState);
@@ -18,6 +19,21 @@
         $scope.$on('$ionicView.beforeEnter', beforeEnter);
         $scope.$on('$ionicView.beforeLeave', beforeLeave);
 
+
+        function getIconByDevice(device) {
+            switch (device.id) {
+                case 'instruments':
+                    return 'ion-ios-musical-notes';
+                case 'desk':
+                    return 'ion-android-desktop';
+                case 'plant':
+                    return 'ion-leaf';
+                case 'ceiling':
+                    return 'ion-wand';
+                default:
+                    return '';
+            }
+        }
 
         function showNewState(evt, newState) {
             $scope.$broadcast('light-button-update', newState);

@@ -36,6 +36,14 @@ button.isOff.button-assertive {
     -webkit-transform: scale(-1,-1);
 }
 
+.videoView .button-small i {
+    margin-left: -5px;
+}
+
+.videoView .icon {
+    font-size: 25px;
+}
+
 /* Container box to set the sides relative to */
 .my-toast > .title-right {
     /*width: 30%;*/

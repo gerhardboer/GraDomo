@@ -1,5 +1,5 @@
 <ion-view view-title="Video" ng-controller="videoView as vm">
-    <ion-content>
+    <ion-content class="videoView">
         <div class="list card">
 
             <div class="item item-image">
@@ -20,16 +20,13 @@
 
                 <div class="item row">
                     <div class="col" ng-repeat="device in devices track by $index">
-                        <div class="item">
-                            <div class="padding text-center">
-                                <h3>{{device.name}}</h3>
-                            </div>
+                        <div class="padding text-center">
+                            <i class="icon {{lights.getIconByDevice(device)}}"></i>
+                        </div>
 
-                            <div class="button-bar">
-                                <light-button type="on" device="device"></light-button>
-                                <light-button type="off" device="device"></light-button>
-                            </div>
-
+                        <div class="button-bar">
+                            <light-button type="on" device="device"></light-button>
+                            <light-button type="off" device="device"></light-button>
                         </div>
                     </div>
                 </div>
