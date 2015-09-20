@@ -12,36 +12,12 @@
         .value('CAMERA_URL', 'ws://' + host + ':' + 5002 + '/')
         .value('VIDEO_URL', 'ws://' + host + ':' + 5004 + '/')
         .value('IMAGE_URL', 'http://' + host + ':' + 5003 + '/')
-        .config(function (toastrConfig, $stateProvider, $urlRouterProvider) {
-            angular.extend(toastrConfig, {
-                positionClass: 'toast-top-right',
-                maxOpened: 2,
-                newestOnTop: false,
-                preventOpenDuplicates: true
-            });
-
-            $stateProvider
-                .state('light', {
-                    url: "/light",
-                    views: {
-                        'light-tab': {
-                            templateUrl: "app/light/LightView.html"
-                        }
-                    }
-                })
-                .state('picture', {
-                    url: "/picture",
-                    views: {
-                        'picture-tab': {
-                            templateUrl: "app/picture/pictureView.html"
-                        }
-                    }
-                });
-
-
-            $urlRouterProvider.otherwise('/');
+        .config(function (toastrConfig, $stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+            configToastr(toastrConfig);
+            configNavigation($stateProvider, $urlRouterProvider);
+            configIonic($ionicConfigProvider);
         })
-        .run(function ($ionicPlatform, $rootScope, piWebsocket, piToastr) {
+        .run(function ($ionicPlatform) {
             $ionicPlatform.ready(function () {
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // for form inputs)
@@ -51,13 +27,47 @@
                 if (window.StatusBar) {
                     StatusBar.styleDefault();
                 }
-
-                document.addEventListener("resume", function () {
-                    //piWebsocket('close');
-                    //piToastr('info', 'Sockets closed')
-                }, false);
             });
         });
+
+    function configToastr(toastrConfig) {
+        angular.extend(toastrConfig, {
+            positionClass: 'toast-top-right',
+            maxOpened: 2,
+            newestOnTop: false,
+            preventOpenDuplicates: true
+        });
+    }
+
+    function configNavigation($stateProvider, $urlRouterProvider) {
+        $stateProvider
+            .state('light', {
+                url: "/light",
+                views: {
+                    'light-tab': {
+                        templateUrl: "app/light/LightView.html"
+                    }
+                }
+            })
+            .state('picture', {
+                url: "/picture",
+                views: {
+                    'picture-tab': {
+                        templateUrl: "app/picture/pictureView.html"
+                    }
+                }
+            });
+
+
+        $urlRouterProvider.otherwise('/');
+    }
+
+    function configIonic($ionicConfigProvider) {
+        $ionicConfigProvider.tabs.style('stable');
+
+        $ionicConfigProvider.tabs.position('bottom');
+    }
+
     function getHostBasedOnPlatform() {
         var host = '192.168.0.18';
         //if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
