@@ -1,15 +1,40 @@
-<ion-view view-title="Video">
-  <ion-content ng-controller="videoView as vm">
+<ion-view view-title="Video" ng-controller="videoView as vm">
+    <ion-content>
+        <div class="list card">
 
-      <div class="list card">
+            <div class="item item-image">
+                <img src="http://192.168.0.18:8080/?action=stream" class="img-flip-correction"/>
+            </div>
 
-          <div class="item item-image">
-              <img src="http://192.168.0.18:8080/?action=stream" class="img-flip-correction"/>
-          </div>
+            <div class="item">
+                <h2>Video</h2>
+            </div>
+        </div>
 
-          <div class="item">
-              <h2>Video</h2>
-          </div>
-      </div>
-  </ion-content>
+
+        <div ng-controller="LightView as lights" ng-init="lights.init()">
+            <div class="list card" ng-repeat="(room, devices) in lights.gui track by $index">
+                <div class="item item-divider">
+                    <p class="padding">{{room}}</p>
+                </div>
+
+                <div class="item row">
+                    <div class="col" ng-repeat="device in devices track by $index">
+                        <div class="item">
+                            <div class="padding text-center">
+                                <h3>{{device.name}}</h3>
+                            </div>
+
+                            <div class="button-bar">
+                                <light-button type="on" device="device"></light-button>
+                                <light-button type="off" device="device"></light-button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </ion-content>
 </ion-view>

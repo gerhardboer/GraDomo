@@ -10,6 +10,8 @@
     function LightView($scope, lightService, piToastr) {
         var vm = this;
 
+        vm.init = init;
+
         $scope.$on('light-gui', showGUI);
         $scope.$on('light-update', showNewState);
 
