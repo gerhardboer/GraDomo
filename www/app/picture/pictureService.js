@@ -28,7 +28,7 @@
         function responseHandler(evt) {
             if (evt.data) {
                 var response = angular.fromJson(evt.data);
-                $rootScope.$broadcast('picture-update', toPictureDAO(response));
+                $rootScope.$broadcast('picture-update', toViewData(response));
             }
         }
 
@@ -44,10 +44,13 @@
             }
         }
 
-        function toPictureDAO(response) {
+        function toViewData(response) {
             return {
-                url: IMAGE_URL + response.file + '?' + Date.now(),
-                date: response.date
+                picture: {
+                    url: IMAGE_URL + response.file + '?' + Date.now(),
+                    date: response.date
+                },
+                serverInfo: response.serverInfo
             }
         }
     }
