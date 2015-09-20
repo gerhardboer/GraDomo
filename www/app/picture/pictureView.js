@@ -12,10 +12,9 @@
         vm.serverInfo = {};
 
         vm.init = init;
-        vm.getNewPicture = getNewPicture;
 
         $scope.$on('$ionicView.beforeEnter', beforeEnter);
-        $scope.$on('$ionicView.beforeLeave', beforeLeave);
+        //$scope.$on('$ionicView.beforeLeave', beforeLeave);
         $scope.$on('picture-update', updateView);
 
         function init() {
@@ -28,7 +27,7 @@
 
         function beforeEnter() {
             piToastr('info', 'picture - $ionicView.beforeEnter');
-            //init();
+            init();
         }
 
         function beforeLeave() {
@@ -51,21 +50,12 @@
             piToastr('info', 'Retrieving latest picture')
         }
 
-        function getNewPicture() {
-            vm.history.push(angular.copy(vm.latestImage));
-
-            pictureService.getNewPicture();
-
-            piToastr('info', 'Retrieving new picture')
-        }
-
         function updateView(evt, viewData) {
             vm.latestImage = null;
 
             //allow the angular cycle one tick
             $timeout(function () {
-                vm.latestImage = viewData.picture;
-                vm.serverInfo = viewData.serverInfo;
+                vm.latestImage = viewData;
             }, 0);
 
             piToastr('success', 'Image loaded');

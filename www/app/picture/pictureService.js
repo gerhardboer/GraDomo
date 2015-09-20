@@ -8,22 +8,27 @@
 
         this.openSocket = openSocket;
         this.closeSocket = closeSocket;
-        this.getNewPicture = getNewPicture;
         this.getLatestPicture = getLatestPicture;
 
-        var pictureSocket;
+        var videoSocket;
 
         function openSocket(onClose) {
             var deferred = $q.defer();
 
-            pictureSocket = piWebsocket('picture', responseHandler, deferred, onClose);
+            if (!videoSocket) {
+                videoSocket = piWebsocket('video', responseHandler, deferred, onClose);
+            } else {
+                videoSocket.setHandler(responseHandler);
+                deferred.resolve();
+            }
 
             return deferred.promise;
         }
 
         function closeSocket() {
-            if (pictureSocket) {
-                pictureSocket.close();
+            if (videoSocket) {
+                videoSocket.close();
+                videoSocket = null;
             }
         }
 
@@ -34,26 +39,20 @@
             }
         }
 
-        function getNewPicture() {
-            if (pictureSocket) {
-                pictureSocket.send('getNewPicture')
-            }
-        }
-
         function getLatestPicture() {
-            if (pictureSocket) {
-                pictureSocket.send("getLatestPicture")
+            if (videoSocket) {
+                videoSocket.send("snapshot")
             }
         }
 
         function toViewData(response) {
             return {
-                picture: {
-                    url: IMAGE_URL + response.file + '?' + Date.now(),
-                    date: response.date
-                },
-                serverInfo: response.serverInfo
+                url: response.snapshot + addCacheBreaker()
             }
+        }
+
+        function addCacheBreaker() {
+            return '&t=' + Date.now();
         }
     }
 

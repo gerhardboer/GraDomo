@@ -12,7 +12,7 @@
 
         $scope.$on('video-update', handleVideoUpdate);
         $scope.$on('$ionicView.beforeEnter', beforeEnter);
-        $scope.$on('$ionicView.beforeLeave', beforeLeave);
+        //$scope.$on('$ionicView.beforeLeave', beforeLeave);
 
         function handleVideoUpdate(evt, data) {
             vm.streamUrl = data.streamUrl;
