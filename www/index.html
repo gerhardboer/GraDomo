@@ -19,6 +19,7 @@
     <script src="lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ng-cordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
@@ -48,15 +49,24 @@
 
 <ion-tabs class="tabs-stable tabs-icon-only">
 
-    <ion-tab title="Lights" icon="ion-ios-lightbulb-outline" href="/light">
+    <ion-tab title="Lights"
+             icon-on="ion-ios-lightbulb"
+             icon-off="ion-ios-lightbulb-outline"
+             href="/light">
         <ion-nav-view name="light-tab"></ion-nav-view>
     </ion-tab>
 
-    <ion-tab title="Pictures" icon="ion-ios-camera-outline" href="/picture">
+    <ion-tab title="Pictures"
+             icon-on="ion-ios-camera"
+             icon-off="ion-ios-camera-outline"
+             href="/picture">
         <ion-nav-view name="picture-tab"></ion-nav-view>
     </ion-tab>
 
-    <ion-tab title="Video" icon="ion-videocamera" href="/video">
+    <ion-tab title="Video"
+             icon-on="ion-ios-eye"
+             icon-off="ion-ios-eye-outline"
+             href="/video">
         <ion-nav-view name="video-tab"></ion-nav-view>
     </ion-tab>
 

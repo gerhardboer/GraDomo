@@ -7,7 +7,7 @@
     var host = getHostBasedOnPlatform();
 
 
-    angular.module('GraDomo', ['ionic', 'toastr'])
+    angular.module('GraDomo', ['ionic', 'ngCordova', 'toastr'])
         .value('LIGHT_URL', 'ws://' + host + ':' + 5001 + '/websocket')
         .value('CAMERA_URL', 'ws://' + host + ':' + 5002 + '/')
         .value('VIDEO_URL', 'ws://' + host + ':' + 5004 + '/')

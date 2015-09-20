@@ -5,6 +5,7 @@
     "ionic": "driftyco/ionic-bower#1.1.0"
   },
   "dependencies": {
-    "angular-toastr": "1.4.1"
+    "angular-toastr": "1.4.1",
+    "ng-cordova": "~0.0.3"
   }
 }
