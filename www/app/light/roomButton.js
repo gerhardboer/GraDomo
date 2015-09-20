@@ -17,8 +17,8 @@
       controllerAs: 'vm',
       bindToController: true,
       template: '<button class="button button-small" ng-class="{\'button-balanced\': vm.isOn, \'button-assertive\': vm.isOff}" ng-click="vm.execute()"> ' +
-      '<span ng-if="!vm.executing">{{vm.type}}</span> ' +
-      '<ion-spinner ng-if="vm.executing" icon="android" class="loadingRoom-padding"></ion-spinner> ' +
+      '<span>{{vm.type}}</span> ' +
+      //'<ion-spinner ng-if="vm.executing" icon="android" class="loadingRoom-padding"></ion-spinner> ' +
       '</button>'
     };
 

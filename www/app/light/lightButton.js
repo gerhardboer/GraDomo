@@ -17,8 +17,8 @@
             controllerAs: 'vm',
             bindToController: true,
             template: '<button class="button button-small" ng-class="{\'isOff\': vm.isOff(), \'isOn\': vm.isOn(), \'button-balanced\': vm.isTypeOn, \'button-assertive\': vm.isTypeOff}" ng-click="vm.execute()"> ' +
-            '<i class="icon" ng-class="{\'ion-flash\': vm.isTypeOn, \'ion-flash-off\': vm.isTypeOff}" ng-if="!vm.executing"></i> ' +
-            '<ion-spinner icon="android" class="loading-padding-top" ng-if="vm.executing"></ion-spinner> ' +
+            '<i class="icon" ng-class="{\'ion-flash\': vm.isTypeOn, \'ion-flash-off\': vm.isTypeOff}"></i> ' +
+            //'<ion-spinner icon="android" class="loading-padding-top" ng-if="vm.executing"></ion-spinner> ' +
             '</button>'
         };
 
