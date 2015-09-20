@@ -56,6 +56,14 @@
                         templateUrl: "app/picture/pictureView.html"
                     }
                 }
+            })
+            .state('video', {
+                url: "/video",
+                views: {
+                    'video-tab': {
+                        templateUrl: "app/video/videoView.html"
+                    }
+                }
             });
 
 
