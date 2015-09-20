@@ -2,9 +2,9 @@
     angular.module('GraDomo')
         .service('pictureService', service);
 
-    service.$inject = ['$q', 'piWebsocket', '$rootScope', 'IMAGE_URL'];
+    service.$inject = ['$q', 'piWebsocket', '$rootScope'];
 
-    function service($q, piWebsocket, $rootScope, IMAGE_URL) {
+    function service($q, piWebsocket, $rootScope) {
 
         this.openSocket = openSocket;
         this.closeSocket = closeSocket;
