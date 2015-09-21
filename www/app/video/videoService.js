@@ -13,18 +13,11 @@
         this.getVideoStream = getVideoStream;
 
         function openSocket(onClose) {
-            var deferred = $q.defer();
+            return piWebsocket('video', responseHandler, onClose)
+                .then(function (socket) {
+                    videoSocket = socket;
+                });
 
-            if (!videoSocket) {
-                piWebsocket('video', responseHandler, deferred, onClose)
-                    .then(function(socket) {
-                        videoSocket = socket;
-                    });
-            } else {
-                videoSocket.setHandler(responseHandler);
-                deferred.resolve();
-            }
-            return deferred.promise;
         }
 
         function closeSocket() {

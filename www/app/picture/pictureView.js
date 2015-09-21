@@ -14,7 +14,7 @@
         vm.init = init;
         vm.refresh = refresh;
 
-        $scope.$on('$ionicView.beforeEnter', beforeEnter);
+        $scope.$on('$ionicView.afterEnter', beforeEnter);
         //$scope.$on('$ionicView.beforeLeave', beforeLeave);
         $scope.$on('picture-update', updateView);
 
@@ -57,7 +57,7 @@
             //allow the angular cycle one tick
             $timeout(function () {
                 vm.latestImage = viewData;
-            }, 0);
+            }, 150);
 
             piToastr('success', 'Image loaded');
         }

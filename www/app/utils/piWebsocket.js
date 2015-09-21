@@ -9,10 +9,9 @@
 
     function PiWebsocket($q, urlService) {
         var sockets = {};
-        return function (type, handler, onOpenPromise, onCloseCb) {
+        return function (type, handler, onCloseCb) {
             var socketDef = {
                 handler: handler,
-                onOpenPromise: onOpenPromise,
                 onClose: onClose
             };
 
@@ -49,39 +48,38 @@
             }
         }
 
-        function buildSocket(type, url, socketDef) {
-            var deferred = $q.defer();
-            url.then(function(url) {
-                var handler = socketDef.handler;
-                var onCloseFn = socketDef.onClose;
-                var onOpenPromise = socketDef.onOpenPromise;
+        function buildSocket(type, urlPromise, socketDef) {
+            var onOpenPromise = $q.defer();
+            var handler = socketDef.handler;
+            var onCloseFn = socketDef.onClose;
 
+            urlPromise.then(setHandlerOrCreate);
+
+            return onOpenPromise.promise;
+
+            function setHandlerOrCreate(url) {
                 if (sockets[type]) {
                     sockets[type].setHandler(handler);
-                    onOpenPromise.resolve({});
+                    onOpenPromise.resolve(sockets[type]);
                 } else {
                     sockets[type] = new Socket(url, handler, onOpenPromise, onCloseFn);
                 }
-
-                deferred.resolve(sockets[type]);
-            });
-            return deferred.promise;
+            }
         }
     }
 
     function Socket(url, handler, onOpenPromise, onCloseFn) {
+        var self = this;
         var oWebsocket = new WebSocket(url);
 
         oWebsocket.onmessage = handler;
 
         oWebsocket.onopen = function (evt) {
-            onOpenPromise && onOpenPromise.resolve({
-                data: evt
-            });
+            onOpenPromise && onOpenPromise.resolve(self);
         };
 
         oWebsocket.onclose = function (evt) {
-          onCloseFn && onCloseFn(url, evt);
+            onCloseFn && onCloseFn(url, evt);
         };
 
         oWebsocket.onerror = function (evt) {
@@ -99,11 +97,11 @@
             }
         };
 
-        this.close = function() {
+        this.close = function () {
             oWebsocket.close();
         };
 
-        this.softClose = function (){
+        this.softClose = function () {
             onCloseFn({});
         };
 
