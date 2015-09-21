@@ -9,19 +9,32 @@
         var host = getHostBasedOnPlatform();
         var wifiInfo;
 
+        var ports = {
+            light: 5001,
+            video: 5004,
+            image: 5003,
+            camera: 5002,
+            stream: 8080
+        };
+
         var urls = {
-            LIGHT_URL: 'ws://' + host + ':' + 5001 + '/websocket',
-            VIDEO_URL: 'ws://' + host + ':' + 5004 + '/',
-            IMAGE_URL: 'http://' + host + ':' + 5003 + '/',
-            CAMERA_URL: 'ws://' + host + ':' + 5002 + '/'
+            LIGHT_URL: 'ws://' + host + ':' + ports.light + '/websocket',
+            VIDEO_URL: 'ws://' + host + ':' + ports.video + '/',
+            IMAGE_URL: 'http://' + host + ':' + ports.image + '/',
+            CAMERA_URL: 'ws://' + host + ':' + ports.camera + '/'
         };
 
         this.getWifiName = getWifiName;
         this.storeWifiInfo = storeWifiInfo;
+        this.getHost = getHost;
 
         this.getLightUrl = getLightUrl;
         this.getVideoUrl = getVideoUrl;
         this.getCameraUrl = getCameraUrl;
+
+        function getHost(port) {
+            return 'http://' + host + ":" + ports[port];
+        }
 
         //loaded in app.run, so data is here
         //allthough, callback.. so not sure

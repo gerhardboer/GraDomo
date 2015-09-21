@@ -2,9 +2,9 @@
     angular.module('GraDomo')
         .service('pictureService', service);
 
-    service.$inject = ['$q', 'piWebsocket', '$rootScope'];
+    service.$inject = ['$q', 'piWebsocket', '$rootScope', 'urlService'];
 
-    function service($q, piWebsocket, $rootScope) {
+    function service($q, piWebsocket, $rootScope, urlService) {
 
         this.openSocket = openSocket;
         this.closeSocket = closeSocket;
@@ -47,7 +47,7 @@
 
         function toViewData(response) {
             return {
-                url: response.snapshot + addCacheBreaker()
+                url: urlService.getHost('stream') + response.snapshot + addCacheBreaker()
             }
         }
 

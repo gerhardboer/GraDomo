@@ -2,9 +2,9 @@
     angular.module('GraDomo')
         .service('videoService', service);
 
-    service.$inject = ['$q', '$rootScope', 'piWebsocket'];
+    service.$inject = ['$q', '$rootScope', 'piWebsocket', 'urlService'];
 
-    function service($q, $rootScope, piWebsocket) {
+    function service($q, $rootScope, piWebsocket, urlService) {
 
         var videoSocket;
 
@@ -42,7 +42,10 @@
         }
 
         function parseData(result) {
-            return result;
+            return {
+                message: result.message,
+                streamUrl: urlService.getHost('stream') + result.streamUrl
+            };
         }
     }
 
