@@ -12,6 +12,7 @@
         vm.serverInfo = {};
 
         vm.init = init;
+        vm.refresh = refresh;
 
         $scope.$on('$ionicView.beforeEnter', beforeEnter);
         //$scope.$on('$ionicView.beforeLeave', beforeLeave);
@@ -47,7 +48,7 @@
         function getLatestPicture() {
             pictureService.getLatestPicture();
 
-            piToastr('info', 'Retrieving latest picture')
+            piToastr('info', 'Requesting latest picture')
         }
 
         function updateView(evt, viewData) {
@@ -59,6 +60,12 @@
             }, 0);
 
             piToastr('success', 'Image loaded');
+        }
+
+        function refresh() {
+            pictureService.getLatestPicture();
+
+            piToastr('info', 'Refreshing picture')
         }
 
     }
