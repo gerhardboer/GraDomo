@@ -5,9 +5,9 @@
     angular.module('GraDomo')
         .factory('piWebsocket', PiWebsocket);
 
-    PiWebsocket.$inject = ['urlService'];
+    PiWebsocket.$inject = ['$q', 'urlService'];
 
-    function PiWebsocket(urlService) {
+    function PiWebsocket($q, urlService) {
         var sockets = {};
         return function (type, handler, onOpenPromise, onCloseCb) {
             var socketDef = {
@@ -50,7 +50,8 @@
         }
 
         function buildSocket(type, url, socketDef) {
-            return url.then(function(url) {
+            var deferred = $q.defer();
+            url.then(function(url) {
                 var handler = socketDef.handler;
                 var onCloseFn = socketDef.onClose;
                 var onOpenPromise = socketDef.onOpenPromise;
@@ -62,8 +63,9 @@
                     sockets[type] = new Socket(url, handler, onOpenPromise, onCloseFn);
                 }
 
-                return sockets[type];
+                deferred.resolve(sockets[type]);
             });
+            return deferred.promise;
         }
     }
 

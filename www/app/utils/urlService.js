@@ -6,7 +6,7 @@
 
     function urlService($q) {
 
-        var deferred = $q.defer();
+        var defers = [];
         var wifiInfo;
 
 
@@ -35,14 +35,16 @@
         //allthough, callback.. so not sure
         function storeWifiInfo(data) {
             wifiInfo = data;
-            deferred.resolve(getHostBasedOnPlatform())
+            defers.forEach(function (deferred) {
+                deferred.resolve(getHostBasedOnPlatform())
+            });
         }
 
         function getWifiName() {
             return ionic.Platform.isAndroid() ? wifiInfo.activity.SSID : '';
         }
 
-        function resolveForDesktop(type) {
+        function resolveForDesktop(deferred, type) {
             if (!ionic.Platform.isAndroid()) {
                 var host = getHostBasedOnPlatform();
                 switch (type) {
@@ -69,11 +71,13 @@
         }
 
         function getLightUrl() {
+            var deferred = $q.defer();
+
             deferred.promise.then(function (wifiInfo) {
                 return buildLightUrl(wifiInfo)
             });
 
-            resolveForDesktop('light');
+            resolveForDesktop(deferred, 'light');
 
             return deferred.promise;
         }
@@ -83,12 +87,14 @@
         }
 
         function getVideoUrl() {
+            var deferred = $q.defer();
+
             deferred.promise.then(function (wifiInfo) {
                 return buildVideoUrl(wifiInfo);
             });
 
-            resolveForDesktop('video');
-
+            resolveForDesktop(deferred, 'video');
+            defers.push(deferred);
             return deferred.promise;
         }
 
@@ -97,12 +103,13 @@
         }
 
         function getCameraUrl() {
+            var deferred = $q.defer();
+
             deferred.promise.then(function (wifiInfo) {
                 return buildCameraUrl(wifiInfo);
             });
 
-            resolveForDesktop('camera');
-
+            resolveForDesktop(deferred, 'camera');
 
             return deferred.promise;
         }
@@ -116,7 +123,7 @@
                 return buildImageUrl(wifiInfo);
             });
 
-            resolveForDesktop('image');
+            resolveForDesktop(deferred, 'image');
 
             return deferred.promise;
         }
