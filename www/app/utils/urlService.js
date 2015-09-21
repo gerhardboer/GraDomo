@@ -38,31 +38,42 @@
             defers.forEach(function (deferred) {
                 deferred.resolve(getHostBasedOnPlatform())
             });
+            defers = null;
         }
 
         function getWifiName() {
             return ionic.Platform.isAndroid() ? wifiInfo.activity.SSID : '';
         }
 
-        function resolveForDesktop(deferred, type) {
-            if (!ionic.Platform.isAndroid()) {
-                var host = getHostBasedOnPlatform();
-                switch (type) {
-                    case 'light':
-                        deferred.resolve(buildLightUrl(host));
-                        break;
-                    case 'camera':
-                        deferred.resolve(buildCameraUrl(host));
-                        break;
-                    case 'image':
-                        deferred.resolve(buildImageUrl(host));
-                        break;
-                    case 'video':
-                        deferred.resolve(buildVideoUrl(host));
-                        break;
-                    default:
-                        break;
+        function resolveForDesktopOrFinished(deferred, type) {
+            if (defers) {
+                if (!ionic.Platform.isAndroid()) {
+                    resolveUrl(type, deferred);
+                } else {
+                    defers.push(deferred);
                 }
+            } else {
+                resolveUrl(type, deferred);
+            }
+        }
+
+        function resolveUrl(type, deferred) {
+            var host = getHostBasedOnPlatform();
+            switch (type) {
+                case 'light':
+                    deferred.resolve(buildLightUrl(host));
+                    break;
+                case 'camera':
+                    deferred.resolve(buildCameraUrl(host));
+                    break;
+                case 'image':
+                    deferred.resolve(buildImageUrl(host));
+                    break;
+                case 'video':
+                    deferred.resolve(buildVideoUrl(host));
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -77,7 +88,7 @@
                 return buildLightUrl(wifiInfo)
             });
 
-            resolveForDesktop(deferred, 'light');
+            resolveForDesktopOrFinished(deferred, 'light');
 
             return deferred.promise;
         }
@@ -93,8 +104,8 @@
                 return buildVideoUrl(wifiInfo);
             });
 
-            resolveForDesktop(deferred, 'video');
-            defers.push(deferred);
+            resolveForDesktopOrFinished(deferred, 'video');
+
             return deferred.promise;
         }
 
@@ -109,7 +120,7 @@
                 return buildCameraUrl(wifiInfo);
             });
 
-            resolveForDesktop(deferred, 'camera');
+            resolveForDesktopOrFinished(deferred, 'camera');
 
             return deferred.promise;
         }
@@ -119,11 +130,13 @@
         }
 
         function getImageUrl() {
+            var deferred = $q.defer();
+
             deferred.promise.then(function (wifiInfo) {
                 return buildImageUrl(wifiInfo);
             });
 
-            resolveForDesktop(deferred, 'image');
+            resolveForDesktopOrFinished(deferred, 'image');
 
             return deferred.promise;
         }
@@ -139,7 +152,6 @@
         }
 
         function isOnHomeWifi() {
-            console.log('wifiInfo.activity.SSID', wifiInfo.activity.SSID);
             return wifiInfo && wifiInfo.activity.SSID === '"waarom?"';
         }
 
