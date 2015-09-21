@@ -23,7 +23,6 @@
                 }
 
                 console.log('window.plugins ', window.plugins);
-                console.log('window.plugins.WifiAdmin ', window.plugins.WifiAdmin);
 
                 if(window.plugins && window.plugins.WifiAdmin) {
                     console.log('getting info');

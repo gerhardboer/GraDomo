@@ -18,7 +18,10 @@
             var deferred = $q.defer();
 
             if (!videoSocket) {
-                videoSocket = piWebsocket('video', responseHandler, deferred, onClose);
+                piWebsocket('video', responseHandler, deferred, onClose)
+                    .then(function(socket) {
+                        videoSocket = socket;
+                    });
             } else {
                 videoSocket.setHandler(responseHandler);
                 deferred.resolve();
@@ -48,7 +51,7 @@
         }
 
         function host() {
-            return urlService.wifiName() + ': ' + urlService.host('stream')
+            return urlService.host('stream')
         }
 
         function toViewData(response) {

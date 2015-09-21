@@ -6,10 +6,9 @@
 
     function urlService($q) {
 
-        var deffered = $q.defer();
-        var wifiInfo = function () {
-            this.SSID = deffered.promise;
-        };
+        var deferred = $q.defer();
+        var wifiInfo;
+
 
         var ports = {
             light: 5001,
@@ -19,70 +18,121 @@
             stream: 8080
         };
 
-        this.wifiName = wifiName;
+        this.wifiName = getWifiName;
         this.storeWifiInfo = storeWifiInfo;
-        this.host = host;
+        this.host = getHost;
 
-        this.lightUrl = lightUrl;
-        this.videoUrl = videoUrl;
-        this.cameraUrl = cameraUrl;
+        this.lightUrl = getLightUrl;
+        this.videoUrl = getVideoUrl;
+        this.cameraUrl = getCameraUrl;
+        this.imageUrl = getImageUrl;
 
-        function host(port) {
+        function getHost(port) {
             return 'http://' + getHostBasedOnPlatform() + ":" + ports[port];
         }
 
         //loaded in app.run, so data is here
         //allthough, callback.. so not sure
         function storeWifiInfo(data) {
-            console.log('storing: ', data);
             wifiInfo = data;
-            deffered.resolve()
+            deferred.resolve(getHostBasedOnPlatform())
         }
 
-        function wifiName() {
-            return wifiInfo.SSID;
+        function getWifiName() {
+            return ionic.Platform.isAndroid() ? wifiInfo.activity.SSID : '';
         }
 
-        function lightUrl() {
-            return getHostBasedOnPlatform()
-                .then(function (host) {
-                    return 'ws://' + host + ':' + ports.light + '/websocket';
-                });
+        function resolveForDesktop(type) {
+            if (!ionic.Platform.isAndroid()) {
+                var host = getHostBasedOnPlatform();
+                switch (type) {
+                    case 'light':
+                        deferred.resolve(buildLightUrl(host));
+                        break;
+                    case 'camera':
+                        deferred.resolve(buildCameraUrl(host));
+                        break;
+                    case 'image':
+                        deferred.resolve(buildImageUrl(host));
+                        break;
+                    case 'video':
+                        deferred.resolve(buildVideoUrl(host));
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
-        function videoUrl() {
-            return getHostBasedOnPlatform()
-                .then(function (host) {
-                    return 'http://' + host + ':' + ports.video + '/';
-                });
-
+        function buildLightUrl(wifiInfo) {
+            return 'ws://' + wifiInfo + ':' + ports.light + '/websocket';
         }
 
-        function cameraUrl() {
-            return getHostBasedOnPlatform()
-                .then(function (host) {
-                    return 'ws://' + host + ':' + ports.camera + '/';
-                });
+        function getLightUrl() {
+            deferred.promise.then(function (wifiInfo) {
+                return buildLightUrl(wifiInfo)
+            });
+
+            resolveForDesktop('light');
+
+            return deferred.promise;
         }
+
+        function buildVideoUrl(wifiInfo) {
+            return 'ws://' + wifiInfo + ':' + ports.video + '/';
+        }
+
+        function getVideoUrl() {
+            deferred.promise.then(function (wifiInfo) {
+                return buildVideoUrl(wifiInfo);
+            });
+
+            resolveForDesktop('video');
+
+            return deferred.promise;
+        }
+
+        function buildCameraUrl(wifiInfo) {
+            return 'ws://' + wifiInfo + ':' + ports.camera + '/';
+        }
+
+        function getCameraUrl() {
+            deferred.promise.then(function (wifiInfo) {
+                return buildCameraUrl(wifiInfo);
+            });
+
+            resolveForDesktop('camera');
+
+
+            return deferred.promise;
+        }
+
+        function buildImageUrl(wifiInfo) {
+            return 'http://' + wifiInfo + ':' + ports.image + '/';
+        }
+
+        function getImageUrl() {
+            deferred.promise.then(function (wifiInfo) {
+                return buildImageUrl(wifiInfo);
+            });
+
+            resolveForDesktop('image');
+
+            return deferred.promise;
+        }
+
 
         function getHostBasedOnPlatform() {
-            if (!deffered) {
-                return determineHost();
-            }
-
-            return deffered.promise;
-        }
-
-        function determineHost() {
             var host = '192.168.0.18';
             if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
                 host = 'localhost';
             }
-            return $q.when(host);
+
+            return host;
         }
 
         function isOnHomeWifi() {
-            console.log('SSID ', wifiInfo.activity.SSID);
+            console.log('wifiInfo.activity.SSID', wifiInfo.activity.SSID);
             return wifiInfo && wifiInfo.activity.SSID === '"waarom?"';
         }
 

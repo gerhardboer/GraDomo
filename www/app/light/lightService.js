@@ -23,7 +23,10 @@
         function openSocket(onClose) {
             var deferred = $q.defer();
 
-            lightSocket = piWebsocket('light', lightMessageHandler, deferred, onClose);
+            piWebsocket('light', lightMessageHandler, deferred, onClose)
+                .then(function(socket) {
+                    lightSocket = socket;
+                });
 
             return deferred.promise;
         }

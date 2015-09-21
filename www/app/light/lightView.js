@@ -16,9 +16,8 @@
         $scope.$on('light-gui', showGUI);
         $scope.$on('light-update', showNewState);
 
-        $scope.$on('$ionicView.beforeEnter', beforeEnter);
+        $scope.$on('$ionicView.afterEnter', beforeEnter);
         $scope.$on('$ionicView.beforeLeave', beforeLeave);
-
 
         function getIconByDevice(device) {
             switch (device.id) {

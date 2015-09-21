@@ -16,9 +16,13 @@
             var deferred = $q.defer();
 
             if (!videoSocket) {
-                videoSocket = piWebsocket('video', responseHandler, deferred, onClose);
+                piWebsocket('video', responseHandler, deferred, onClose)
+                    .then(function(socket) {
+                        videoSocket = socket;
+                    });
             } else {
                 videoSocket.setHandler(responseHandler);
+                deferred.resolve();
             }
             return deferred.promise;
         }

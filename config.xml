@@ -16,6 +16,8 @@
     <allow-navigation href="*://192.168.0.18:5001/*"/>
     <allow-navigation href="*://localhost/*"/>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 192.168.0.18"/>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' localhost"/>
+
 
     <preference name="webviewbounce" value="false"/>
     <preference name="UIWebViewBounce" value="false"/>

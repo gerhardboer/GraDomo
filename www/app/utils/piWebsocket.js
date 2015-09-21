@@ -21,15 +21,15 @@
             }
 
             if (type === 'picture') {
-                return buildSocket(urlService.cameraUrl(), socketDef);
+                return buildSocket(type, urlService.cameraUrl(), socketDef);
             }
 
             if (type === 'light') {
-                return buildSocket(urlService.lightUrl(), socketDef);
+                return buildSocket(type, urlService.lightUrl(), socketDef);
             }
 
             if (type === 'video') {
-                return buildSocket(urlService.videoUrl(), socketDef);
+                return buildSocket(type, urlService.videoUrl(), socketDef);
             }
 
 
@@ -49,19 +49,21 @@
             }
         }
 
-        function buildSocket(url, socketDef) {
-            var handler = socketDef.handler;
-            var onCloseFn = socketDef.onClose;
-            var onOpenPromise = socketDef.onOpenPromise;
+        function buildSocket(type, url, socketDef) {
+            return url.then(function(url) {
+                var handler = socketDef.handler;
+                var onCloseFn = socketDef.onClose;
+                var onOpenPromise = socketDef.onOpenPromise;
 
-            if (sockets[url]) {
-                sockets[url].setHandler(handler);
-                onOpenPromise.resolve({});
-            } else {
-                sockets[url] = new Socket(url, handler, onOpenPromise, onCloseFn);
-            }
+                if (sockets[type]) {
+                    sockets[type].setHandler(handler);
+                    onOpenPromise.resolve({});
+                } else {
+                    sockets[type] = new Socket(url, handler, onOpenPromise, onCloseFn);
+                }
 
-            return sockets[url];
+                return sockets[type];
+            });
         }
     }
 
