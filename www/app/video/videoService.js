@@ -44,7 +44,7 @@
         function parseData(result) {
             return {
                 message: result.message,
-                streamUrl: urlService.getHost('stream') + result.streamUrl
+                streamUrl: urlService.host('stream') + result.streamUrl
             };
         }
     }

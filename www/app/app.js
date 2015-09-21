@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 (function () {
-
+    var wifiInfo;
     angular.module('GraDomo', ['ionic', 'toastr'])
         .config(function (toastrConfig, $stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             configToastr(toastrConfig);
@@ -22,17 +22,24 @@
                     StatusBar.styleDefault();
                 }
 
+                console.log('window.plugins ', window.plugins);
+                console.log('window.plugins.WifiAdmin ', window.plugins.WifiAdmin);
+
                 if(window.plugins && window.plugins.WifiAdmin) {
+                    console.log('getting info');
+
                     window.plugins.WifiAdmin.getWifiInfo(wifiInfoSuccess, wifiInfoFailed);
                 }
 
                 function wifiInfoSuccess(data) {
+                    console.log('wifiInfo success');
                     urlService.storeWifiInfo(data);
                 }
 
                 function wifiInfoFailed() {
 
                 }
+
             });
         });
 

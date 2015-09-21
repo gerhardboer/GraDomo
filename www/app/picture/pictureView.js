@@ -23,7 +23,7 @@
                 .then(getLatestPicture)
                 .catch(showSocketError);
 
-            piToastr('info', 'Opening picture socket')
+            piToastr('info', 'Opening ' + pictureService.host())
         }
 
         function beforeEnter() {
@@ -46,7 +46,7 @@
         }
 
         function getLatestPicture() {
-            pictureService.getLatestPicture();
+            pictureService.latestPicture();
 
             piToastr('info', 'Requesting latest picture')
         }
@@ -63,7 +63,7 @@
         }
 
         function refresh() {
-            pictureService.getLatestPicture();
+            pictureService.latestPicture();
 
             piToastr('info', 'Refreshing picture')
         }

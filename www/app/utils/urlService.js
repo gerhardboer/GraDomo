@@ -2,12 +2,14 @@
     angular.module('GraDomo')
         .service('urlService', urlService);
 
-    urlService.$inject = [];
+    urlService.$inject = ['$q'];
 
-    function urlService() {
+    function urlService($q) {
 
-        var host = getHostBasedOnPlatform();
-        var wifiInfo;
+        var deffered = $q.defer();
+        var wifiInfo = function () {
+            this.SSID = deffered.promise;
+        };
 
         var ports = {
             light: 5001,
@@ -17,59 +19,71 @@
             stream: 8080
         };
 
-        var urls = {
-            LIGHT_URL: 'ws://' + host + ':' + ports.light + '/websocket',
-            VIDEO_URL: 'ws://' + host + ':' + ports.video + '/',
-            IMAGE_URL: 'http://' + host + ':' + ports.image + '/',
-            CAMERA_URL: 'ws://' + host + ':' + ports.camera + '/'
-        };
-
-        this.getWifiName = getWifiName;
+        this.wifiName = wifiName;
         this.storeWifiInfo = storeWifiInfo;
-        this.getHost = getHost;
+        this.host = host;
 
-        this.getLightUrl = getLightUrl;
-        this.getVideoUrl = getVideoUrl;
-        this.getCameraUrl = getCameraUrl;
+        this.lightUrl = lightUrl;
+        this.videoUrl = videoUrl;
+        this.cameraUrl = cameraUrl;
 
-        function getHost(port) {
-            return 'http://' + host + ":" + ports[port];
+        function host(port) {
+            return 'http://' + getHostBasedOnPlatform() + ":" + ports[port];
         }
 
         //loaded in app.run, so data is here
         //allthough, callback.. so not sure
         function storeWifiInfo(data) {
+            console.log('storing: ', data);
             wifiInfo = data;
+            deffered.resolve()
         }
 
-        function getWifiName() {
+        function wifiName() {
             return wifiInfo.SSID;
         }
 
-        function getLightUrl() {
-            return urls.LIGHT_URL;
+        function lightUrl() {
+            return getHostBasedOnPlatform()
+                .then(function (host) {
+                    return 'ws://' + host + ':' + ports.light + '/websocket';
+                });
         }
 
-        function getVideoUrl() {
-            return urls.VIDEO_URL;
+        function videoUrl() {
+            return getHostBasedOnPlatform()
+                .then(function (host) {
+                    return 'http://' + host + ':' + ports.video + '/';
+                });
+
         }
 
-        function getCameraUrl() {
-            return urls.VIDEO_URL;
+        function cameraUrl() {
+            return getHostBasedOnPlatform()
+                .then(function (host) {
+                    return 'ws://' + host + ':' + ports.camera + '/';
+                });
         }
-
 
         function getHostBasedOnPlatform() {
+            if (!deffered) {
+                return determineHost();
+            }
+
+            return deffered.promise;
+        }
+
+        function determineHost() {
             var host = '192.168.0.18';
             if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
                 host = 'localhost';
             }
-
-            return host;
+            return $q.when(host);
         }
 
         function isOnHomeWifi() {
-            return wifiInfo && wifiInfo.SSID === 'waarom?';
+            console.log('SSID ', wifiInfo.activity.SSID);
+            return wifiInfo && wifiInfo.activity.SSID === '"waarom?"';
         }
 
     }

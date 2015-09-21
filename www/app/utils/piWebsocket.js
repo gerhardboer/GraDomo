@@ -21,15 +21,15 @@
             }
 
             if (type === 'picture') {
-                return buildSocket(urlService.getCameraUrl(), socketDef);
+                return buildSocket(urlService.cameraUrl(), socketDef);
             }
 
             if (type === 'light') {
-                return buildSocket(urlService.getLightUrl(), socketDef);
+                return buildSocket(urlService.lightUrl(), socketDef);
             }
 
             if (type === 'video') {
-                return buildSocket(urlService.getVideoUrl(), socketDef);
+                return buildSocket(urlService.videoUrl(), socketDef);
             }
 
 

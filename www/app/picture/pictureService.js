@@ -6,9 +6,11 @@
 
     function service($q, piWebsocket, $rootScope, urlService) {
 
+        this.host = host;
+        this.latestPicture = latestPicture;
+
         this.openSocket = openSocket;
         this.closeSocket = closeSocket;
-        this.getLatestPicture = getLatestPicture;
 
         var videoSocket;
 
@@ -39,19 +41,23 @@
             }
         }
 
-        function getLatestPicture() {
+        function latestPicture() {
             if (videoSocket) {
                 videoSocket.send("snapshot")
             }
         }
 
+        function host() {
+            return urlService.wifiName() + ': ' + urlService.host('stream')
+        }
+
         function toViewData(response) {
             return {
-                url: urlService.getHost('stream') + response.snapshot + addCacheBreaker()
+                url: host() + response.snapshot + cacheBreaker()
             }
         }
 
-        function addCacheBreaker() {
+        function cacheBreaker() {
             return '&t=' + Date.now();
         }
     }
