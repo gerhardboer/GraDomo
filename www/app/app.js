@@ -44,7 +44,7 @@
 
     function configToastr(toastrConfig) {
         angular.extend(toastrConfig, {
-            positionClass: 'toast-top-right',
+            positionClass: 'toast-top-left',
             maxOpened: 2,
             newestOnTop: false,
             preventOpenDuplicates: true
