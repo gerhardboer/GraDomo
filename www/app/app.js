@@ -28,6 +28,8 @@
                     console.log('getting info');
 
                     window.plugins.WifiAdmin.getWifiInfo(wifiInfoSuccess, wifiInfoFailed);
+                } else {
+                    urlService.storeWifiInfo({SSID: ''});
                 }
 
                 function wifiInfoSuccess(data) {

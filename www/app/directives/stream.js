@@ -5,6 +5,7 @@
             var imageNr = 0; // Serial number of current image
             var finished = []; // References to img objects which have finished downloading
             var paused = false;
+            var $scope;
 
             var url,
                 streamElement;
@@ -16,19 +17,17 @@
                 link: function (scope, element, attrs) {
                     url = attrs.url;
                     streamElement = element[0];
-                    createImageLayer(element[0]);
+                    $scope = scope;
+
+                    createImageLayer();
                 }
             };
 
             function createImageLayer() {
                 var img = new Image();
-                img.style.position = "absolute";
-                img.style.zIndex = -1;
-                //img.style['margin-left'] = '-250px';
-                img.style.width = '100%';
-                img.style['vertical-align'] = 'middle';
+                img.classList.add('video-stream-img');
                 img.onload = imageOnload;
-                //img.onclick = imageOnclick;
+                img.onclick = imageOnclick;
                 img.src = url + "&n=" + (++imageNr);
                 img.classList.add('img-flip-correction');
                 streamElement.insertBefore(img, streamElement.firstChild);
@@ -47,7 +46,12 @@
 
             function imageOnclick() { // Clicking on the image will pause the stream
                 paused = !paused;
-                if (!paused) createImageLayer();
+                if (!paused) {
+                    createImageLayer();
+                    $scope.$emit('video-started');
+                } else {
+                    $scope.$emit('video-paused');
+                }
             }
 
         })

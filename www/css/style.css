@@ -46,6 +46,27 @@ ion-content {
     float: right;
 }
 
+.video-stream-img {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    vertical-align: middle;
+    left:0;
+}
+
+.video-state {
+    text-transform: capitalize;
+}
+
+.fixed-video-stream-desktop {
+    height:500px
+}
+
+.fixed-video-stream-android {
+    height:255px;
+}
+
+
 button.isOn.button-balanced {
     box-shadow: 0 0 10px 2px #28a54c
 }
