@@ -13,14 +13,11 @@
         this.getVideoStream = getVideoStream;
 
         function openSocket(onClose) {
-            var deferred = $q.defer();
+            return piWebsocket('video', responseHandler, onClose)
+                .then(function (socket) {
+                    videoSocket = socket;
+                });
 
-            if (!videoSocket) {
-                videoSocket = piWebsocket('video', responseHandler, deferred, onClose);
-            } else {
-                videoSocket.setHandler(responseHandler);
-            }
-            return deferred.promise;
         }
 
         function closeSocket() {
@@ -44,7 +41,7 @@
         function parseData(result) {
             return {
                 message: result.message,
-                streamUrl: urlService.getHost('stream') + result.streamUrl
+                streamUrl: urlService.host('stream') + result.streamUrl
             };
         }
     }

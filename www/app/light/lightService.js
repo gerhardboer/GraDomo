@@ -21,11 +21,10 @@
         var lightSocket;
 
         function openSocket(onClose) {
-            var deferred = $q.defer();
-
-            lightSocket = piWebsocket('light', lightMessageHandler, deferred, onClose);
-
-            return deferred.promise;
+            return piWebsocket('light', lightMessageHandler, onClose)
+                .then(function (socket) {
+                    lightSocket = socket;
+                });
         }
 
         function closeSocket() {
