@@ -2,9 +2,9 @@
     angular.module('GraDomo')
         .controller('videoView', ctrl);
 
-    ctrl.$inject = ['$scope', 'videoService'];
+    ctrl.$inject = ['$interval', '$scope', 'videoService'];
 
-    function ctrl($scope, videoService) {
+    function ctrl($interval, $scope, videoService) {
         var vm = this;
 
         vm.streamUrl = '';
@@ -15,7 +15,7 @@
         //$scope.$on('$ionicView.beforeLeave', beforeLeave);
 
         function handleVideoUpdate(evt, data) {
-            vm.streamUrl = data.streamUrl;
+            vm.stream = {url: data.url};
         }
 
         function init() {

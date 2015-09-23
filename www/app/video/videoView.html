@@ -2,8 +2,9 @@
     <ion-content class="videoView">
         <div class="list card">
 
-            <div class="item item-image">
-                <img ng-src="{{vm.streamUrl}}" class="img-flip-correction"/>
+            <div class="item item-image" style="height: 395px">
+                <!--<img ng-src="{{vm.streamUrl}}" class="" stream/>-->
+                <stream url="{{vm.stream.url}}" ng-if="vm.stream"></stream>
             </div>
 
             <div class="item">
