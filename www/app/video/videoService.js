@@ -2,9 +2,9 @@
     angular.module('GraDomo')
         .service('videoService', service);
 
-    service.$inject = ['$q', '$rootScope', 'piWebsocket', 'urlService'];
+    service.$inject = ['$rootScope', 'piWebsocket', 'urlService'];
 
-    function service($q, $rootScope, piWebsocket, urlService) {
+    function service($rootScope, piWebsocket, urlService) {
 
         var videoSocket;
 
@@ -30,12 +30,22 @@
         function responseHandler(evt) {
             if (evt.data) {
                 var response = angular.fromJson(evt.data);
-                $rootScope.$broadcast('video-update', parseData(response));
+                $rootScope.$broadcast('video-update', toViewData(response));
             }
         }
 
         function getVideoStream() {
-            videoSocket.send('start');
+            videoSocket.send('snapshot');
+        }
+
+        function toViewData(response) {
+            return {
+                url: urlService.host('stream') + response.snapshot + cacheBreaker()
+            }
+        }
+
+        function cacheBreaker() {
+            return '&t=' + Date.now();
         }
 
         function parseData(result) {

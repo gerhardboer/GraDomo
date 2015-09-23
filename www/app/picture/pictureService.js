@@ -2,11 +2,12 @@
     angular.module('GraDomo')
         .service('pictureService', service);
 
-    service.$inject = ['$q', 'piWebsocket', '$rootScope', 'urlService'];
+    service.$inject = ['piWebsocket', '$rootScope', 'urlService'];
 
-    function service($q, piWebsocket, $rootScope, urlService) {
+    function service(piWebsocket, $rootScope, urlService) {
 
-        this.host = host;
+        this.streamHost = streamHost;
+        this.videoSocketHost = videoSocketHost;
         this.latestPicture = latestPicture;
 
         this.openSocket = openSocket;
@@ -28,11 +29,16 @@
             }
         }
 
+        function videoSocketHost() {
+            return urlService.host('video')
+        }
+
         function responseHandler(evt) {
             if (evt.data) {
                 var response = angular.fromJson(evt.data);
                 $rootScope.$broadcast('picture-update', toViewData(response));
             }
+
         }
 
         function latestPicture() {
@@ -41,13 +47,13 @@
             }
         }
 
-        function host() {
+        function streamHost() {
             return urlService.host('stream')
         }
 
         function toViewData(response) {
             return {
-                url: host() + response.snapshot + cacheBreaker()
+                url: streamHost() + response.snapshot + cacheBreaker()
             }
         }
 

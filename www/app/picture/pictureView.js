@@ -23,7 +23,7 @@
                 .then(getLatestPicture)
                 .catch(showSocketError);
 
-            piToastr('info', 'Opening ' + pictureService.host())
+            piToastr('info', 'Opening ' + pictureService.videoSocketHost())
         }
 
         function beforeEnter() {

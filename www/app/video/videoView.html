@@ -2,13 +2,20 @@
     <ion-content class="videoView">
         <div class="list card">
 
-            <div class="item item-image">
-                <img ng-src="{{vm.streamUrl}}" class="img-flip-correction"/>
+            <div class="item item-image" ng-class="{
+                'fixed-video-stream-android': vm.isAndroid,
+                'fixed-video-stream-desktop': !vm.isAndroid
+            }">
+                <stream url="{{vm.stream.url}}" ng-if="vm.stream"></stream>
             </div>
 
-            <div class="item">
-                <h2>Video</h2>
-            </div>
+            <a href="#" class="item item-icon-left video-state">
+                <i class="icon" ng-class="{
+                    'ion-ios-play': vm.videoState === 'started',
+                    'ion-ios-pause': vm.videoState === 'paused'
+                }"></i>
+                {{vm.videoState}}
+            </a>
         </div>
 
 
