@@ -16,7 +16,11 @@
             };
 
             if (type === 'close') {
-                closeSockets();
+                if(Array.isArray(handler)) {
+                    closeSockets(handler);
+                } else {
+                    closeSockets();
+                }
             }
 
             if (type === 'picture') {
@@ -32,19 +36,25 @@
             }
 
 
-            function onClose(URL) {
-                delete sockets[URL];
+            function onClose(type) {
+                delete sockets[type];
                 onCloseCb && onCloseCb({reason: type + ' socket closed'});
             }
         };
 
 
-        function closeSockets() {
-            Object.keys(sockets)
-                .forEach(closeSocket);
+        function closeSockets(socketsToClose) {
+            if(socketsToClose) {
+                socketsToClose
+                    .forEach(closeSocket);
+            } else {
+                //all sockets
+                Object.keys(sockets)
+                    .forEach(closeSocket);
+            }
 
             function closeSocket(socketId) {
-                sockets[socketId].close();
+                sockets[socketId] && sockets[socketId].close();
             }
         }
 
@@ -62,13 +72,13 @@
                     sockets[type].setHandler(handler);
                     onOpenPromise.resolve(sockets[type]);
                 } else {
-                    sockets[type] = new Socket(url, handler, onOpenPromise, onCloseFn);
+                    sockets[type] = new Socket(type, url, handler, onOpenPromise, onCloseFn);
                 }
             }
         }
     }
 
-    function Socket(url, handler, onOpenPromise, onCloseFn) {
+    function Socket(type, url, handler, onOpenPromise, onCloseFn) {
         var self = this;
         var oWebsocket = new WebSocket(url);
 
@@ -79,7 +89,7 @@
         };
 
         oWebsocket.onclose = function (evt) {
-            onCloseFn && onCloseFn(url, evt);
+            onCloseFn && onCloseFn(type, evt);
         };
 
         oWebsocket.onerror = function (evt) {

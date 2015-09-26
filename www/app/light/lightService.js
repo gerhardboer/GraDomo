@@ -5,9 +5,9 @@
     angular.module('GraDomo')
         .service('lightService', LightService);
 
-    LightService.$inject = ['$q', '$timeout', 'piWebsocket', '$rootScope'];
+    LightService.$inject = ['$timeout', 'piWebsocket', '$rootScope'];
 
-    function LightService($q, $timeout, piWebsocket, $rootScope) {
+    function LightService(timeout, piWebsocket, $rootScope) {
         this.requestGUI = requestGUI;
         this.sendOn = sendOn;
         this.sendOff = sendOff;
@@ -17,6 +17,7 @@
 
         this.openSocket = openSocket;
         this.closeSocket = closeSocket;
+        this.closeVideoSocket = closeOtherSockets;
 
         var lightSocket;
 
@@ -32,6 +33,10 @@
                 //close it soft here, since piLight does not send closed event?
                 lightSocket.softClose();
             }
+        }
+
+        function closeOtherSockets() {
+            piWebsocket('close', ['video']);
         }
 
         function lightMessageHandler(evt) {

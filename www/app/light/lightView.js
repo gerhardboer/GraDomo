@@ -53,6 +53,7 @@
 
         function beforeEnter() {
             piToastr('info', 'light - $ionicView.beforeEnter');
+            lightService.closeVideoSocket();
             init();
         }
 
