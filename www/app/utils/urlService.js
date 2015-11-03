@@ -144,9 +144,9 @@
 
         function getHostBasedOnPlatform() {
             var host = '192.168.2.2';
-            if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
-                host = 'localhost';
-            }
+            //if (ionic.Platform.isAndroid() && !isOnHomeWifi()) {
+            //    host = 'localhost';
+            //}
 
             return host;
         }

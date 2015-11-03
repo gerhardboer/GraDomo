@@ -1,39 +1,57 @@
-<ion-view view-title="Video" ng-controller="videoView as vm">
+<ion-view view-title="Video" ng-controller="SchrodingerView as schrd">
     <ion-content class="videoView">
         <div class="list card">
 
             <div class="item item-image" ng-class="{
-                'fixed-video-stream-android': vm.isAndroid,
-                'fixed-video-stream-desktop': !vm.isAndroid
+                'fixed-video-stream-android': schrd.isAndroid,
+                'fixed-video-stream-desktop': !schrd.isAndroid
             }">
-                <stream url="{{vm.stream.url}}" ng-if="vm.stream"></stream>
+                {{schrd.stream.url}}
+                <stream url="{{schrd.stream.url}}" ng-if="schrd.stream.url"></stream>
             </div>
 
             <a href="#" class="item item-icon-left video-state">
                 <i class="icon" ng-class="{
-                    'ion-ios-play': vm.videoState === 'started',
-                    'ion-ios-pause': vm.videoState === 'paused'
+                    'ion-ios-play': schrd.videoState === 'started',
+                    'ion-ios-pause': schrd.videoState === 'paused'
                 }"></i>
-                {{vm.videoState}}
+                {{schrd.videoState}}
             </a>
         </div>
 
 
-        <div ng-controller="SchrodingerView as schrd" ng-init="schrd.init()">
+        <div>
             <div class="list card">
                 <div class="item item-divider">
-                    <p class="padding">Options</p>
+                    <p class="padding">
+                        Is the duck inside the box alive or dead?
+                    </p>
                 </div>
 
                 <div class="item row">
-                    <div class="col" ng-repeat="device in schrd.devices track by $index">
+                    <div class="col">
                         <div class="button-bar">
-                            <light-button type="on" device="device"></light-button>
-                            <light-button type="off" device="device"></light-button>
+
+                            <button
+                                ng-click="schrd.toggleLight('alive')"
+                                class="button button-small button-balanced">
+                                Alive
+                            </button>
+
+                            <button
+                                ng-click="schrd.toggleLight('dead')"
+                                class="button button-small button-assertive">
+                                Dead
+                            </button>
+
+                            <button
+                                ng-click="schrd.toggleLight('wood')"
+                                class="button button-small button-calm">
+                                Don't be silly, <br/> who would put a duck in there
+                            </button>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </ion-content>

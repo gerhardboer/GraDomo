@@ -63,19 +63,11 @@
                     }
                 }
             })
-            .state('picture', {
-                url: "/picture",
-                views: {
-                    'picture-tab': {
-                        templateUrl: "app/picture/pictureView.html"
-                    }
-                }
-            })
             .state('video', {
                 url: "/video",
                 views: {
                     'video-tab': {
-                        templateUrl: "app/video/videoView.html"
+                        templateUrl: "app/schrodinger/schrodingerView.html"
                     }
                 }
             });
