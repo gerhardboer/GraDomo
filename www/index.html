@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta http-equiv="Content-Security-Policy" content="
-        connect-src 'self' ws://192.168.0.18:*/ ws://localhost:*/;
-        img-src 'self' data: http://192.168.0.18:*/ http://localhost:*/;
+        connect-src 'self' ws://192.168.0.18:*/ ws://localhost:*/ ws://192.168.2.2:*/;
+        img-src 'self' data: http://192.168.0.18:*/ http://localhost:*/ http://192.168.2.2:*/;
         "/>
     <title></title>
 
@@ -17,7 +17,7 @@
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
-    <!-- ionic/angularjs js -->
+    <!-- ionic/angularjs js -->c
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="lib/angular-toastr/dist/angular-toastr.tpls.min.js"></script>
 
@@ -29,16 +29,13 @@
     <script src="app/app.js"></script>
 
 
+    <script src="app/schrodinger/schrodingerView.js"></script>
+    <script src="app/schrodinger/schrodingerService.js"></script>
+
     <script src="app/light/lightView.js"></script>
     <script src="app/light/lightService.js"></script>
     <script src="app/light/lightButton.js"></script>
     <script src="app/light/roomButton.js"></script>
-
-    <script src="app/picture/pictureView.js"></script>
-    <script src="app/picture/pictureService.js"></script>
-
-    <script src="app/video/videoView.js"></script>
-    <script src="app/video/videoService.js"></script>
 
     <script src="app/utils/piToastr.js"></script>
     <script src="app/utils/urlService.js"></script>
@@ -55,21 +52,7 @@
 
 <ion-tabs class="tabs-stable tabs-icon-only">
 
-    <ion-tab title="Lights"
-             icon-on="ion-ios-lightbulb"
-             icon-off="ion-ios-lightbulb-outline"
-             href="/light">
-        <ion-nav-view name="light-tab"></ion-nav-view>
-    </ion-tab>
-
-    <ion-tab title="Pictures"
-             icon-on="ion-ios-camera"
-             icon-off="ion-ios-camera-outline"
-             href="/picture">
-        <ion-nav-view name="picture-tab"></ion-nav-view>
-    </ion-tab>
-
-    <ion-tab title="Video"
+    <ion-tab title="Schrodinger"
              icon-on="ion-ios-eye"
              icon-off="ion-ios-eye-outline"
              href="/video">

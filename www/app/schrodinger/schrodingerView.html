@@ -19,18 +19,14 @@
         </div>
 
 
-        <div ng-controller="LightView as lights" ng-init="lights.init()">
-            <div class="list card" ng-repeat="(room, devices) in lights.gui track by $index">
+        <div ng-controller="SchrodingerView as schrd" ng-init="schrd.init()">
+            <div class="list card">
                 <div class="item item-divider">
-                    <p class="padding">{{room}}</p>
+                    <p class="padding">Options</p>
                 </div>
 
                 <div class="item row">
-                    <div class="col" ng-repeat="device in devices track by $index">
-                        <div class="padding text-center">
-                            <i class="icon {{lights.getIconByDevice(device)}}"></i>
-                        </div>
-
+                    <div class="col" ng-repeat="device in schrd.devices track by $index">
                         <div class="button-bar">
                             <light-button type="on" device="device"></light-button>
                             <light-button type="off" device="device"></light-button>

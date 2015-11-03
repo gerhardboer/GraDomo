@@ -1,6 +1,6 @@
 (function (angular) {
     angular.module('GraDomo')
-        .controller('videoView', ctrl);
+        .controller('SchrodingerView', ctrl);
 
     ctrl.$inject = ['$timeout', '$scope', 'videoService'];
 
@@ -12,6 +12,10 @@
         vm.isAndroid = ionic.Platform.isAndroid();
 
         vm.videoState = 'started';
+
+        vm.devices = [
+            {state: 'off'}
+        ];
 
         $scope.$on('video-paused', handleVideoPaused);
         $scope.$on('video-started', handleVideoStarted);
