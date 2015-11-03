@@ -55,14 +55,6 @@
 
     function configNavigation($stateProvider, $urlRouterProvider) {
         $stateProvider
-            .state('light', {
-                url: "/light",
-                views: {
-                    'light-tab': {
-                        templateUrl: "app/light/LightView.html"
-                    }
-                }
-            })
             .state('video', {
                 url: "/video",
                 views: {

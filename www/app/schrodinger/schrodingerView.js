@@ -14,7 +14,7 @@
         vm.videoState = 'started';
 
         vm.device = {
-            "id": [{"id": 15, "unit": 12}],
+            "id": 'desk',
             "state": "on"
         };
 
@@ -29,6 +29,10 @@
         vm.toggleLight = function (type) {
             lightService.sendOn(vm.device.id);
             vm.history[type]++;
+
+            $timeout(function() {
+                lightService.sendOff(vm.device.id);
+            }, 2000);
         };
 
         $scope.$on('video-paused', handleVideoPaused);
