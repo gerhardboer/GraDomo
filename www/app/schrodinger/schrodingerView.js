@@ -27,11 +27,12 @@
         vm.stream = {};
 
         vm.toggleLight = function (type) {
-            lightService.sendOn(vm.device.id);
             vm.history[type]++;
 
+            //lightService.sendOn(vm.device.id);
+
             $timeout(function() {
-                lightService.sendOff(vm.device.id);
+                //lightService.sendOff(vm.device.id);
             }, 2000);
         };
 

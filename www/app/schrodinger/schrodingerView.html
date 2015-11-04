@@ -1,4 +1,4 @@
-<ion-view view-title="Video" ng-controller="SchrodingerView as schrd">
+<ion-view view-title="Schrodingers Duck" ng-controller="SchrodingerView as schrd">
     <ion-content class="videoView">
         <div class="list card">
 
@@ -31,25 +31,45 @@
                 <div class="item row">
                     <div class="col">
                         <div class="button-bar">
-
                             <button
                                 ng-click="schrd.toggleLight('alive')"
-                                class="button button-small button-balanced">
+                                class="button  button-balanced">
                                 Alive
                             </button>
 
                             <button
                                 ng-click="schrd.toggleLight('dead')"
-                                class="button button-small button-assertive">
+                                class="button button-assertive">
                                 Dead
                             </button>
-
                             <button
                                 ng-click="schrd.toggleLight('wood')"
-                                class="button button-small button-calm">
-                                Don't be silly, <br/> who would put a duck in there
+                                class="button  button-calm">
+                                Who would put a duck in there
                             </button>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            Clicked: {{schrd.history['alive']}}
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+
+                            Clicked: {{schrd.history['dead']}}
+                        </div>
+
+                    </div>
+                    <div class="col">
+                        <div class="row">
+
+                            Clicked: {{schrd.history['wood']}}
+                        </div>
+
                     </div>
                 </div>
             </div>
