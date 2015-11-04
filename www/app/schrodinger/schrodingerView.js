@@ -2,9 +2,9 @@
     angular.module('GraDomo')
         .controller('SchrodingerView', ctrl);
 
-    ctrl.$inject = ['$timeout', '$scope', 'videoService', 'lightService'];
+    ctrl.$inject = ['$timeout', '$scope', 'pictureService', 'lightService'];
 
-    function ctrl($timeout, $scope, videoService, lightService) {
+    function ctrl($timeout, $scope, pictureService, lightService) {
         var vm = this;
 
         vm.streamUrl = '';
@@ -29,29 +29,33 @@
         vm.toggleLight = function (type) {
             vm.history[type]++;
 
+            getStream();
             lightService.sendOn(vm.device.id);
 
             $timeout(function() {
                 lightService.sendOff(vm.device.id);
+                vm.stream = {};
             }, 2000);
         };
 
         $scope.$on('video-paused', handleVideoPaused);
         $scope.$on('video-started', handleVideoStarted);
 
-        $scope.$on('video-update', handleVideoUpdate);
+        $scope.$on('picture-update', handleVideoUpdate);
         $scope.$on('$ionicView.afterEnter', beforeEnter);
         //$scope.$on('$ionicView.beforeLeave', beforeLeave);
 
         function handleVideoUpdate(evt, data) {
             if (vm.stream.url !== data.url) {
-                vm.stream = {url: data.url};
+                $timeout(function() {
+                    vm.stream = {url: data.url};
+                }, 100)
             }
         }
 
         function init() {
-            videoService.openSocket(onClose)
-                .then(getStream);
+            pictureService.openSocket(onClose)
+                //.then(getStream);
 
             lightService.openSocket(onClose)
         }
@@ -81,7 +85,7 @@
         }
 
         function getStream() {
-            videoService.getVideoStream()
+            pictureService.latestPicture()
         }
 
     }

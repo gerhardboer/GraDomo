@@ -59,6 +59,14 @@
                 url: "/video",
                 views: {
                     'video-tab': {
+                        templateUrl: "app/video/videoView.html"
+                    }
+                }
+            })
+            .state('schrodinger', {
+                url: "/schrodinger",
+                views: {
+                    'schrodinger-tab': {
                         templateUrl: "app/schrodinger/schrodingerView.html"
                     }
                 }

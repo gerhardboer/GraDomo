@@ -33,6 +33,10 @@
     <script src="app/schrodinger/schrodingerView.js"></script>
     <script src="app/schrodinger/videoService.js"></script>
 
+    <script src="app/picture/pictureService.js"></script>
+
+    <script src="app/video/videoView.js"></script>
+
     <script src="app/utils/piToastr.js"></script>
     <script src="app/utils/urlService.js"></script>
     <script src="app/utils/piWebsocket.js"></script>
@@ -51,6 +55,13 @@
     <ion-tab title="Schrodinger"
              icon-on="ion-ios-eye"
              icon-off="ion-ios-eye-outline"
+             href="/schrodinger">
+        <ion-nav-view name="schrodinger-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Video"
+             icon-on="ion-ios-camera"
+             icon-off="ion-ios-camera-outline"
              href="/video">
         <ion-nav-view name="video-tab"></ion-nav-view>
     </ion-tab>

@@ -1,25 +1,5 @@
 <ion-view view-title="Schrodingers Duck" ng-controller="SchrodingerView as schrd">
     <ion-content class="videoView">
-        <div class="list card">
-
-            <div class="item item-image" ng-class="{
-                'fixed-video-stream-android': schrd.isAndroid,
-                'fixed-video-stream-desktop': !schrd.isAndroid
-            }">
-                {{schrd.stream.url}}
-                <stream url="{{schrd.stream.url}}" ng-if="schrd.stream.url"></stream>
-            </div>
-
-            <a href="#" class="item item-icon-left video-state">
-                <i class="icon" ng-class="{
-                    'ion-ios-play': schrd.videoState === 'started',
-                    'ion-ios-pause': schrd.videoState === 'paused'
-                }"></i>
-                {{schrd.videoState}}
-            </a>
-        </div>
-
-
         <div>
             <div class="list card">
                 <div class="item item-divider">
@@ -72,6 +52,16 @@
 
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="list card">
+
+            <div class="item item-image" ng-class="{
+                'fixed-video-stream-android': schrd.isAndroid,
+                'fixed-video-stream-desktop': !schrd.isAndroid
+            }">
+                <img ng-src="{{schrd.stream.url}}" ng-if="schrd.stream.url" class="img-flip-correction"/>
             </div>
         </div>
     </ion-content>
