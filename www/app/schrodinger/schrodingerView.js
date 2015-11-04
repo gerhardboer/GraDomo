@@ -29,10 +29,10 @@
         vm.toggleLight = function (type) {
             vm.history[type]++;
 
-            //lightService.sendOn(vm.device.id);
+            lightService.sendOn(vm.device.id);
 
             $timeout(function() {
-                //lightService.sendOff(vm.device.id);
+                lightService.sendOff(vm.device.id);
             }, 2000);
         };
 
